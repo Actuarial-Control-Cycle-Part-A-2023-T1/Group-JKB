@@ -29,17 +29,36 @@ More information on GitHub Pages can be found [here](https://pages.github.com/)
 # 2023 Student Research Case Study Challenge: Relocation Social Insurance 
 Group JKB Consulting Report
 
+(add something about the purpose of this page, links to code and report)
+
 ---
 
 ### Page Navigation
->Executive Summary.
->Objectives.
+>Executive Summary
+>Objectives
 >Program Design
->Pricing and Costs.
->Assumptions.
->Risk and Risk Mitigation Strategies.
->Data and Data Limitations.
->Conclusion/Recommendations.
->References.
- 
+>Pricing and Costs
+>Assumptions
+>Risk and Risk Mitigation Strategies
+>Data and Data Limitations
+>Conclusion/Recommendations
+>References
+
+## Executive Summary
+
+## Objectives
+
+## Program Design
+
+## Pricing and Costs
+
+## Assumptions
+
+## Risk and Risk Mitigation Strategies
+
+## Data and Data Limitations
+
+## Conclusion/Recommendations
+
+## References
 
