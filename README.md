@@ -28,10 +28,12 @@ More information on GitHub Pages can be found [here](https://pages.github.com/)
 
 # [2023 Student Research Case Study Challenge](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/): Relocation Social Insurance 
 ## UNSW x SOA sponsored by Valani Global
-#### Group JKB Consulting Report
-
+![alt text](logos.png "UNSW, SOA & Valani Global logos")
+>
+## Group JKB Consulting Report
 
 (add something about the purpose of this page, links to code and report)
+
 
 ---
 
@@ -67,11 +69,13 @@ The goal of this social insurance program is to manage the financial risks assoc
 
 The following key metrics will be used to monitor the social insurance program:
 >
-(table from report - either screenshot or create a table)
+| Metric                                               | Frequency                                             |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| Compare costs with and without the scheme            | Annually for the first 10 years, then every 3 years |
+| Number of people who voluntarily relocated each year | Annually                                             |
+| Cost as a percentage of GDP                          | Annually                                             |
+| Value at risk                                        | Annually                                             |
 
-Metric | Frequency
-Compare costs with and without the scheme | Annually for the first 10 years and every 3 years after that
-Number
 
 ## Program Design
 In our program, all citizens of Storslysia will be covered for displacement costs after a climate catastrophe. However, we will distinguish between support for households who are voluntarily relocating and households who are involuntary relocating due to a natural disaster. We also distinguish between renters and owner-occupiers. 
@@ -83,13 +87,17 @@ To be eligible for involuntary relocation support, a household must be affected 
 
 ### Program coverage
 Support for all households with uninhabitable homes affected by the natural disaster, regardless of the region, include the following:
->
+
 * Up to 30% of housing costs will be paid out to replace household goods.
 * Up to 30% of the median value of houses in that region.
 * Temporary housing in the affected region is provided for 12 months.
-In addition, the following benefits are included as a part of the program to assist with relocation:
 >
-(table from report - either screenshot or create a table)
+In addition, the following benefits are included as a part of the program to assist with relocation:
+
+|                                  | Voluntary relocation                                                            | Involuntary relocation                                                                              | 
+| -------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Owner-occupiers (Region 2,4,5,6) | Pay for construction of new home (up to median value) + lump-sum of φ 10,000 | Buy back uninhabitable homes (up to median value) provided the household moves to a low-risk region |
+| Renters (Region 2,4,5,6)         | Pay for home rental costs for 6 months (up to median rent)                      | Pay for home rental costs for 2 months in the new region (up to the median rent)               |
 
 (Karen: didn't include the wordy reasoning sections, they can see the report for that)
 
@@ -97,7 +105,37 @@ In addition, the following benefits are included as a part of the program to ass
 (Karen: still thinking about the best way to present this section in a concise but engaging manner)
 ### Short-term projections
 
+#### Economic costs
+
+|                      | Mean Estimates | Upper Bound (97.5%) |
+| -------------------- | -------------: | ------------------: |
+| Property Damage      | φ 255,15,548   | φ 9,637,762,244     |
+| Displacement Costs   | φ 581,450,888  | φ 25,738,567,833    |
+| Total Economic Costs | φ 836,566,436  | φ 35,376,330,076    |
+
+#### Program costs
+
+|                            | Mean Estimates   | Upper Bound (97.5%) |
+| -------------------------- | ---------------: | ------------------: |
+| Property Damage            | φ 255,15,548     | φ 9,637,762,244     |
+| Displacement Costs         | φ 581,450,888    | φ 25,738,567,833    |
+| Relocation Incentive Costs | φ 12,310,238,772 | φ 12,310,238,772    |
+| *Voluntary Costs*          | φ 12,254,805,736 | φ 12,254,805,736    |
+| *Involuntary Costs*        | φ 55,433,035     | φ 55,433,035        |
+| Total Economic Costs       | φ 836,566,436    | φ 35,376,330,076    |
+
 ### Long-term projections
+
+#### Program costs
+
+|                            | Mean Estimates   | Upper Bound (97.5%) |
+| -------------------------- | ---------------: | ------------------: |
+| Property Damage            | φ 206,962,717    | φ 8,570,367,393     |
+| Displacement Costs         | φ 473,142,809    | φ 22,892,334,372    |
+| Relocation Incentive Costs | φ 51,065,396     | φ 51,065,396        |
+| *Voluntary Costs*          | φ 174,906        | φ 174,906           |
+| *Involuntary Costs*        | φ 50,890,490     | φ 50,890,490        |
+| Total Economic Costs       | φ 731,170,922    | φ 31,513,768,160    |
 
 ### Capital and solvency requirements
 
