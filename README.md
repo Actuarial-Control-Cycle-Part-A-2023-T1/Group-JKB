@@ -34,15 +34,15 @@ Group JKB Consulting Report
 ---
 
 ### Page Navigation
->Executive Summary
->Objectives
->Program Design
->Pricing and Costs
->Assumptions
->Risk and Risk Mitigation Strategies
->Data and Data Limitations
->Conclusion/Recommendations
->References
+>[Executive Summary](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#executive-summary)
+>[Objectives](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#objectives)
+>[Program Design](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#program-design)
+>[Pricing and Costs](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#pricing-and-costs)
+>[Assumptions](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#assumptions)
+>[Risk and Risk Mitigation Strategies](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#risk-and-risk-mitigation-strategies)
+>[Data and Data Limitations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#data-and-data-limitations)
+>[Conclusion/Recommendations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#conclusion/recommendations)
+>[References](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#references)
 
 ## Executive Summary
 
