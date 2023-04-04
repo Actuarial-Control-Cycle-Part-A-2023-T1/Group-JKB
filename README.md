@@ -69,6 +69,10 @@ The following key metrics will be used to monitor the social insurance program:
 >
 (table from report - either screenshot or create a table)
 
+Metric | Frequency
+Compare costs with and without the scheme | Annually for the first 10 years and every 3 years after that
+Number
+
 ## Program Design
 In our program, all citizens of Storslysia will be covered for displacement costs after a climate catastrophe. However, we will distinguish between support for households who are voluntarily relocating and households who are involuntary relocating due to a natural disaster. We also distinguish between renters and owner-occupiers. 
 
@@ -147,7 +151,7 @@ In conclusion, the proposed social insurance scheme can help Storslysia mitigate
 ## References
 >
 * Australian Bureau of Statistics, 4102.0 -  Australian Social Trends, Dec 2011, Commonwealth of Australia, last accessed 21st March 2023, < https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/4102.0Main+Features10Dec+2011>
-* C, S. (2017) Social Insurance: Meaning and Features | Poverty | Economics, last accessed 18th March 2023,  <https://www.economicsdiscussion.net/social-insurance/social-insurance-meaning-and-features-poverty-economics/29305>
+* C, S. (2017) Social Insurance: Meaning and Features | Poverty|Economics, last accessed 18th March 2023,  <https://www.economicsdiscussion.net/social-insurance/social-insurance-meaning-and-features-poverty-economics/29305>
 * College of Vocational Studies, Meaning of Social Insurance Features of Social Insurance, Last accessed 21st March 2023, < https://www.cvs.edu.in/upload/Social%20insurance%20-%20feature%20and%20need.pdf>
 * Department of Regional NSW, Northern Rivers Reconstruction Corporation (2022) Northern Rivers’ voluntary home buy backs to start, last accessed 19th March 2023 <https://www.nsw.gov.au/media-releases/northern-rivers-voluntary-home-buy-backs-to-start>
 * Deryugina, T. (2022), Economic effects of natural disasters, IZA World of Labor, last accessed 22nd March 2023, <IZA World of Labor - Economic effects of natural disasters >
