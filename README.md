@@ -41,7 +41,7 @@ Group JKB Consulting Report
 >[Assumptions](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#assumptions)
 >[Risk and Risk Mitigation Strategies](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#risk-and-risk-mitigation-strategies)
 >[Data and Data Limitations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#data-and-data-limitations)
->[Conclusion/Recommendations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#conclusion/recommendations)
+>[Conclusion/Recommendations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#conclusionrecommendations)
 >[References](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#references)
 
 ## Executive Summary
