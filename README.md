@@ -26,7 +26,10 @@ More information on GitHub Pages can be found [here](https://pages.github.com/)
 
 (Start of page)
 
-# [2023 Student Research Case Study Challenge](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/): Relocation Social Insurance 
+[![2023 SOA Case Study](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)](https://classroom.github.com/a/elzutNYu)
+[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-f4981d0f882b2a3f0472912d15f9806d57e124e0fc890972558857b51b24a6f9.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=10667393)
+
+# [2023 Student Research Case Study Challenge](/): Relocation Social Insurance 
 ## UNSW x SOA sponsored by Valani Global
 ![alt text](logos.png "UNSW, SOA & Valani Global logos")
 >
