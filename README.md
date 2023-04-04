@@ -26,8 +26,10 @@ More information on GitHub Pages can be found [here](https://pages.github.com/)
 
 (Start of page)
 
-# 2023 Student Research Case Study Challenge: Relocation Social Insurance 
+# [2023 Student Research Case Study Challenge](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/): Relocation Social Insurance 
+## UNSW x SOA sponsored by Valani Global
 #### Group JKB Consulting Report
+![](unsw.png){width=50%}
 
 (add something about the purpose of this page, links to code and report)
 
