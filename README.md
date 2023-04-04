@@ -64,8 +64,9 @@ This report was composed to design and evaluate a social insurance program to as
 ## Objectives
 
 The goal of this social insurance program is to manage the financial risks associated with catastrophe-related displacement in Storslysia. To this end, the program aims to encourage proactive relocation which lowers damage risk and comes at a lower cost than involuntary displacement. This scheme will cover the entire population of Storslysia. As well as reducing long-term costs from climate-related disasters regardless of future emissions scenarios, this scheme will provide financial support to Storslysia citizens affected by such disasters. This program will be equitable in its design such that very affluent households are not advantaged by the scheme any more than lower or middle-class households. Keeping the costs arising from relocation from exceeding 10% of GDP each year with a high degree of certainty is the aim of this program. 
->
+
 The following key metrics will be used to monitor the social insurance program:
+>
 (table from report - either screenshot or create a table)
 
 ## Program Design
@@ -83,6 +84,7 @@ Support for all households with uninhabitable homes affected by the natural disa
 * Up to 30% of the median value of houses in that region.
 * Temporary housing in the affected region is provided for 12 months.
 In addition, the following benefits are included as a part of the program to assist with relocation:
+>
 (table from report - either screenshot or create a table)
 
 (Karen: didn't include the wordy reasoning sections, they can see the report for that)
@@ -98,6 +100,7 @@ In addition, the following benefits are included as a part of the program to ass
 
 ## Assumptions
 Assumptions within the modelling process, economic climate and validity of the utilised datasets were required to ensure the program generated accurate and reliable results. A summary of all the assumptions used can be seen in the table below.
+>
 (table from report - either screenshot or create a table)
 
 (Karen: didn't include the wordy explanations)
@@ -107,6 +110,7 @@ Assumptions within the modelling process, economic climate and validity of the u
 
 ### Key risks and mitigation strategies
 When a project is underway, unexpected factors have the potential to affect the success of a project, and thus proactive identification, assessment and action improves the chance of success in meeting project objectives (Hillson, David 2014). The risk matrix (right) illuminates the key areas of risk present within the scheme:
+>
 (table from report - create a table but summarise text even further?)
 
 ### Sensitivity analysis
@@ -114,6 +118,7 @@ The sensitivity analysis is performed using the Shared Socioeconomic Pathways (S
 
 ### Certainty of cost estimates
 Under the proposed program, there is a 97.5% confidence that costs will not exceed 10% of Storslysia’s GDP in any given year as seen in the graph below. The solid lines represent the scheme cost and dashed lines represent 10% of GDP, each under the four SSP scenarios. The real GDP is modelled assuming no population growth and only increases in GDP per capita. While the scheme does not exceed 10% of GDP between now and 2100, there is the possibility it may exceed this level after 2100, particularly in the SSP5 scenario. This means that the program and underlying model assumptions must be assessed in the future to ensure it remains sustainable beyond around 80 years.
+>
 (graph from report)
 
 Given constant claims (no adjusting for climate scenarios), the scheme is expected to have a negative economic benefit for 26 years. After this, the scheme delivers benefits increasing to $110 million in reduced damage and displacement costs per year. Under higher claims scenarios, the economic benefits of the scheme increase: 
