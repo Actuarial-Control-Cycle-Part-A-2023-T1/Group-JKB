@@ -22,3 +22,24 @@ This is written in markdown language.
 
 More information on GitHub Pages can be found [here](https://pages.github.com/)
 ![](Actuarial.gif)
+
+
+(Start of page)
+
+# 2023 Student Research Case Study Challenge: Relocation Social Insurance 
+Group JKB Consulting Report
+
+---
+
+### Page Navigation
+> Executive Summary
+> Objectives
+> Program Design
+> Pricing and Costs
+> Assumptions
+> Risk and Risk Mitigation Strategies
+> Data and Data Limitations
+> Conclusion/Recommendations
+> References
+ 
+
