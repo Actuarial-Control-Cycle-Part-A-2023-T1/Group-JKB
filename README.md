@@ -152,9 +152,14 @@ Assumptions within the modelling process, economic climate and validity of the u
 (Karen: didn't include the wordy explanations)
 
 ## Risk and Risk Mitigation Strategies
-(risk matrix from report)
 
 ![alt text](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/risk_matrix_actl4001.png) 
+
+Risk | Description | Mitigation
+--- | --- | ---
+A: Event Risk | Risk that future climate events result in damages deviating from model predictions; regions may not be homogeneously affected by climate change and new homes in regions 1 and 3 may have different risk profiles from existing homes | Monitor model predictions versus actual property damage on a regular basis; perform sensitivity analysis at the 97.5% event-risk level and hold recommended capital reserves at the 99.5% risk-level
+
+1 | 2 | 3
 
 ### Key risks and mitigation strategies
 When a project is underway, unexpected factors have the potential to affect the success of a project, and thus proactive identification, assessment and action improves the chance of success in meeting project objectives (Hillson, David 2014). The risk matrix (right) illuminates the key areas of risk present within the scheme:
