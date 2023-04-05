@@ -37,6 +37,7 @@ More information on GitHub Pages can be found [here](https://pages.github.com/)
 
 The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the links below.
 
+[Full report](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
 
 ---
 
