@@ -157,7 +157,9 @@ Assumptions within the modelling process, economic climate and validity of the u
 
 Risk | Description | Mitigation
 --- | --- | ---
-A: Event Risk | Risk that future climate events result in damages deviating from model predictions; regions may not be homogeneously affected by climate change and new homes in regions 1 and 3 may have different risk profiles from existing homes | Monitor model predictions versus actual property damage on a regular basis; perform sensitivity analysis at the 97.5% event-risk level and hold recommended capital reserves at the 99.5% risk-level
+A: Event Risk | Risk that future climate events result in damages deviating from model predictions; regions may not be homogeneously affected by climate change and new homes in regions 1 and 3 may have different risk profiles from existing homes | Monitor model predictions versus actual property damage on a regular basis; perform sensitivity analysis at the 97.5% event-risk level and hold recommended capital reserves at the 99.5% risk-level |
+B: Legislative/Governance Risk | Frequency and severity of climate events are contingent upon governments' climate policies; political and governance changes may require modifications to the scheme | Close analysis and discussion with Storslyia's government annually to determine if the scheme is still adequate; consider impact different climate scenarios |
+C: Inequality Risk | Risk that the scheme exacerbates or creates inequalities by disproportionately assisting citizens of higher socio-economic status who are often owner-occupiers | Specific schemes to assist lower-income and wealth individuals and limit the maximum amount paid (such as paying up to the median value of properties in the new region); monitoring people who take up the scheme and modifying it to make it more equitable 
 
 1 | 2 | 3
 
