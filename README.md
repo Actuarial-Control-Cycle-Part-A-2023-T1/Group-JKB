@@ -35,7 +35,7 @@ More information on GitHub Pages can be found [here](https://pages.github.com/)
 >
 ## Group JKB Consulting Report
 
-(add something about the purpose of this page, links to code and report)
+(The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the links below. )
 
 
 ---
