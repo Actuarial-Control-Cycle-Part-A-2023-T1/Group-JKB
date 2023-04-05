@@ -154,6 +154,8 @@ Assumptions within the modelling process, economic climate and validity of the u
 ## Risk and Risk Mitigation Strategies
 (risk matrix from report)
 
+[[/images/risk_matrix_actl4001.png|ALT TEXT]] 
+
 ### Key risks and mitigation strategies
 When a project is underway, unexpected factors have the potential to affect the success of a project, and thus proactive identification, assessment and action improves the chance of success in meeting project objectives (Hillson, David 2014). The risk matrix (right) illuminates the key areas of risk present within the scheme:
 >
