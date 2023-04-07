@@ -155,6 +155,10 @@ Assumptions within the modelling process, economic climate and validity of the u
 
 ![alt text](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/risk_matrix_actl4001.png) 
 
+### Key risks and mitigation strategies
+When a project is underway, unexpected factors have the potential to affect the success of a project, and thus proactive identification, assessment and action improves the chance of success in meeting project objectives (Hillson, David 2014). The risk matrix (below) illustrates the key areas of risk present within the scheme, and is accompanied by an explanatory table:
+>
+
 Risk | Description | Mitigation
 --- | --- | ---
 A: Event Risk | Risk that future climate events result in damages deviating from model predictions; regions may not be homogeneously affected by climate change and new homes in regions 1 and 3 may have different risk profiles from existing homes | Monitor model predictions versus actual property damage on a regular basis; perform sensitivity analysis at the 97.5% event-risk level and hold recommended capital reserves at the 99.5% risk-level |
@@ -164,10 +168,6 @@ D: Migration Risk | Program's ability to induce relocations from one region to a
 E: Prediction Risk | Difficulty in projecting for long-term timeframes of up to 100 years, resulting in volatile forecasts and affecting capital allocation and scheme costing | Conservative approach taken in claims modelling and in assumptions; sensitivity analysis performed to consider impact of varying scenarios
 
 
-### Key risks and mitigation strategies
-When a project is underway, unexpected factors have the potential to affect the success of a project, and thus proactive identification, assessment and action improves the chance of success in meeting project objectives (Hillson, David 2014). The risk matrix (right) illuminates the key areas of risk present within the scheme:
->
-(table from report - create a table but summarise text even further?)
 
 ### Sensitivity analysis
 The sensitivity analysis is performed using the Shared Socioeconomic Pathways (SSPs) carbon emissions scenario forecasts (see Appendix Table 3.2). The projected log values of the long-term economic costs without the program are shown in the graph below. Under the best scenario (SSP1) where the world shifts to become greener and more sustainable, then the costs of climate-related disasters can be reduced below current (2020) levels. However, in the other 3 scenarios of higher carbon emissions, the economic cost will only continue to increase in the future. In the most severe scenario (SSP5), the average economic cost could increase up to 17-fold by 2150.
