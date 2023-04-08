@@ -1,33 +1,7 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-8d59dc4de5201274e310e4c54b9627a8934c3b88527886e3b421487c677d23eb.svg)](https://classroom.github.com/a/elzutNYu)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-f4981d0f882b2a3f0472912d15f9806d57e124e0fc890972558857b51b24a6f9.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=10667393)
-# Actuarial Theory and Practice A @ UNSW
+[![2023 SOA Case Study](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20CASE%20STUDY%20button.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
+[![CONSULTING REPORT](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/CONSULTING%20REPORT%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
+[![FINAL COMBINED CODE](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/FINAL%20COMBINED%20CODE%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
 
-_"Tell me and I forget. Teach me and I remember. Involve me and I learn" - Benjamin Franklin_
-
----
-
-### Congrats on completing the [2023 SOA Research Challenge](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)!
-
->Now it's time to build your own website to showcase your work.  
->To create a website on GitHub Pages to showcase your work is very easy.
-
-This is written in markdown language. 
->
-* Click [link](https://classroom.github.com/a/elzutNYu) to accept your group assignment.
-
-
-#### Follow the [guide doc](Doc1.pdf) to submit your work. 
----
->Be creative! Feel free to link to embed your [data](hazard-event-data.csv), [code](sample-data-clean.ipynb), [image](unsw.png) here
-
-More information on GitHub Pages can be found [here](https://pages.github.com/)
-![](Actuarial.gif)
-
-
-(Start of page)
-
-[![2023 SOA Case Study]([https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20CASE%20STUDY%20BUTTON.svg](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20CASE%20STUDY%20BUTTON%20-%20small.svg))](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
-[![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-f4981d0f882b2a3f0472912d15f9806d57e124e0fc890972558857b51b24a6f9.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=10667393)
 
 # 2023 Student Research Case Study Challenge: Relocation Social Insurance 
 ## UNSW x SOA sponsored by Valani Global
