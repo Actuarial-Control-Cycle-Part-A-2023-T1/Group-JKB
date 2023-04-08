@@ -26,12 +26,12 @@ More information on GitHub Pages can be found [here](https://pages.github.com/)
 
 (Start of page)
 
-[![2023 SOA Case Study](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20Case%20Study%20Button.png)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
+[![2023 SOA Case Study](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20CASE%20STUDY%20BUTTON.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-f4981d0f882b2a3f0472912d15f9806d57e124e0fc890972558857b51b24a6f9.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=10667393)
 
 # 2023 Student Research Case Study Challenge: Relocation Social Insurance 
 ## UNSW x SOA sponsored by Valani Global
-![alt text](logos.png "UNSW, SOA & Valani Global logos")
+![alt text](LOGOS.svg "UNSW, SOA & Valani Global logos")
 >
 ## Group JKB Consulting Report
 
