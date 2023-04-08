@@ -1,17 +1,19 @@
-[![2023 SOA Case Study](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20CASE%20STUDY%20button.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
-[![CONSULTING REPORT](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/CONSULTING%20REPORT%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
-[![FINAL COMBINED CODE](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/FINAL%20COMBINED%20CODE%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
-
-
 # 2023 Student Research Case Study Challenge: Relocation Social Insurance 
 ## UNSW x SOA sponsored by Valani Global
 ![alt text](LOGOS.svg "UNSW, SOA & Valani Global logos")
 >
 ## Group JKB Consulting Report
 
-The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the links below.
+The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the buttons or links below.
 
-[Full report](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
+[![2023 SOA Case Study](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20CASE%20STUDY%20button.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
+[![CONSULTING REPORT](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/CONSULTING%20REPORT%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
+[![FINAL COMBINED CODE](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/FINAL%20COMBINED%20CODE%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
+
+
+[2023 SOA Case Study](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
+[Consulting Report](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
+[Final Combined Code](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
 
 ---
 
