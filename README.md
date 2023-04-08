@@ -126,7 +126,7 @@ With the social insurance program in place, the effects of incentivising relocat
 ### Capital and solvency requirements
 According to the European Union’s Solvency II requirement, companies must hold enough capital to have a 99.5% confidence of surviving the most extreme expected losses during a year (Risk.net n.d.). To ensure this same level of certainty for Storslysia’s insurance program, the total economic capital in the first year of implementation would be close to φ 390 billion. After that, each subsequent year requires less capital to be held ending at around φ 346 billion needed in 2110. The amount of capital needed over the short and long-term timeframes is displayed in the graph below.
 
-![Capital Requirement Graph](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Graph%20-%20Capital%20Requirement.png)
+![Capital Requirement Graph](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Capital%20Requirement%20Graph.png)
 
 ## Assumptions
 Assumptions within the modelling process, economic climate and validity of the utilised datasets were required to ensure the program generated accurate and reliable results. A summary of all the assumptions used can be seen in the table below.
