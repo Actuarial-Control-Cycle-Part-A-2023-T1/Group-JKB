@@ -1,0 +1,1775 @@
+# SETUP ====
+
+## Set working directory
+  
+## Loading packages
+
+#install.packages('dplyr')
+library(dplyr)
+#install.packages('zoo')
+library(zoo)
+#install.packages('caret')
+library(caret)
+#install.packages('ggplot2')
+library(ggplot2)
+#install.packages('lattice')
+library(lattice)
+#install.packages('tidyverse')
+library(tidyverse)
+#install.packages('caTools')
+library(caTools)
+#install.packages('class')
+library(class)
+#install.packages('readxl')
+library(readxl)
+#install.packages('boot')
+library(boot)
+#install.packages('rpart')
+library(rpart)
+#install.packages('xgboost')
+library(xgboost)
+#install.packages('gbm')
+library(gbm)
+#install.packages('Metrics')
+library(Metrics)
+#install.packages('glmnet')
+library(glmnet)
+#install.packages('leaps')
+library(leaps)
+#install.packages('MASS')
+library(MASS)
+#install.packages('stats4')
+library(stats4)
+#install.packages('readr')
+library(readr)
+#install.packages('repr')
+library(repr)
+#install.packages('lubridate')
+library(lubridate)
+#install.packages('gamlr')
+library(gamlr)
+#install.packages("readxl")
+library(readxl)
+#install.packages('xlsx')
+#library(xlsx)
+#install.packages("gridExtra")
+library(gridExtra)
+#install.packages("fitdistrplus")
+library(fitdistrplus)
+#install.packages("fpp2")
+library(fpp2)
+#install.packages("PerformanceAnalytics")
+library(PerformanceAnalytics)
+#install.packages("tinytex")
+library(tinytex)
+#install.packages("readr")
+library(readr)
+#install.packages("tidyr")
+library(tidyr)
+#install.packages("matrixStats")
+library(matrixStats)
+
+# EXPLORATORY DATA ANALYSIS ====
+
+## Importing Data and renaming variables
+
+### Import hazard event data
+hazard_data <- read_excel("2023-student-research-hazard-event-data.xlsx", range = "B13:I3379") %>%
+  mutate(Region = as.factor(Region))
+head(hazard_data)
+
+### Import emissions data
+SSP_scenarios_data <- read_excel("2023-student-research-emissions.xlsx", range = "'SSP Scenarios'!B16:V32")
+SSP_colnames <- c("Year", "CO2-SSP1-2.6", "CO2-SSP2-3.4", "CO2-SSP3-6.0", "CO2-SSP5-Baseline",
+                  "WPop-SSP1-2.6", "WPop-SSP2-3.4", "WPop-SSP3-6.0", "WPop-SSP5-Baseline",
+                  "WGDP-SSP1-2.6", "WGDP-SSP2-3.4", "WGDP-SSP3-6.0", "WGDP-SSP5-Baseline",
+                  "GDPPC-SSP1-2.6", "GDPPC-SSP2-3.4", "GDPPC-SSP3-6.0", "GDPPC-SSP5-Baseline")
+#### Rename and reformat data
+SSP_scenarios_data <- SSP_scenarios_data %>%
+  dplyr::select(., -2, -7, -12, -17)
+colnames(SSP_scenarios_data) <- SSP_colnames
+head(SSP_scenarios_data)
+emissions_data <- read_excel("2023-student-research-emissions.xlsx", range = "'Model'!B20:W34")
+emissions_data <- emissions_data %>%
+  dplyr::select(., -2, -6, -10, -14, -18)
+emissions_colnames <- c("Year", "SSP1-Minor", "SSP1-Medium", "SSP1-Major",
+                        "SSP2-Minor", "SSP2-Medium", "SSP2-Major",
+                        "SSP3-Minor", "SSP3-Medium", "SSP3-Major",
+                        "SSP5-Minor", "SSP5-Medium", "SSP5-Major",
+                        "RAF-SSP1-2.6", "RAF-SSP2-3.4", "RAF-SSP3-6.0",
+                        "RAF-SSP5-Baseline")
+colnames(emissions_data) <- emissions_colnames
+head(emissions_data)
+
+### Import economic and demographic data
+eco_dem_data <- read_excel("2023-student-research-eco-dem-data.xlsx", range = "'Demographic-Economic'!B8:H51")
+head(eco_dem_data)
+library(data.table)
+#### Rename and reformat data
+region_demo <- transpose(eco_dem_data)
+for(i in c(8:10,17,20:21,30)){
+  region_demo[,i] <- gsub("Ꝕ ", "", as.character(region_demo[,i]))
+  region_demo[,i] <- gsub(",", "", as.character(region_demo[,i]))
+}
+region_demo <- region_demo [2:7,]
+region_demo <- data.frame(lapply(region_demo, as.numeric))
+rownames(region_demo) <- colnames(eco_dem_data[,2:7])
+colnames(region_demo) <- pull(eco_dem_data[,1])
+inf_int_data <- read_excel("2023-student-research-eco-dem-data.xlsx", range = "'Inflation-Interest'!B8:F68")
+head(inf_int_data)
+#### note 3 erroneous values
+
+## Cleaning data
+duplicates <- which(duplicated(hazard_data) == TRUE)
+### 13 duplicates found
+
+
+# DATA TRANSFORMATION ====
+
+## Inflation data
+
+head(inf_int_data)
+dim(inf_int_data)
+
+### Visualise data
+ggplot(data = inf_int_data) +
+  geom_line(aes(x = Year, y = Inflation))
+ggplot(data = inf_int_data %>% filter (Year < 2003)) +
+  geom_line(aes(x = Year, y = Inflation)) + 
+  ylim(0, 0.125)
+ggplot(data = inf_int_data %>% filter (Year > 2003)) +
+  geom_line(aes(x = Year, y = Inflation)) + 
+  ylim(0, 0.125)
+#### fix value for 2003 (-990%) by taking average over 2002 and 2004
+inf_int_data[42,2] <- 0.5*(inf_int_data[41,2]+inf_int_data[43,2])
+ggplot(data = inf_int_data) +
+  geom_line(aes(x = Year, y = Inflation))
+#### add new column for price index and factor
+inf_int_data <- inf_int_data %>%
+  mutate(CPI = rep(0,60))
+#### set last row (year 1962 as baseline CPI = 100)
+inf_int_data[1,6] <- 100
+#### fill in price index values
+for(i in 2:60){
+  inf_int_data[i,6] <- inf_int_data[i-1,6]*(1+inf_int_data[i,2])
+}
+as.numeric(inf_int_data[60,6])
+#### add new column for price factor
+inf_int_data <- inf_int_data %>%
+  mutate("Inflation Factor" = as.numeric(inf_int_data[60,6])/CPI)
+head(inf_int_data)
+
+
+## Grouping data by quarter
+
+#### adjusting property damage by inflation factors
+inf.factor <- inf_int_data %>% dplyr::select(1,7)
+#### join to hazard data and replace NA (i.e. before 1962) with 1962 values
+hazard_data <- left_join(hazard_data, inf.factor, by = "Year") %>%
+  mutate(`Inflation Factor` = replace_na(`Inflation Factor`, as.numeric(inf.factor[1,2])),
+         "Inflated Damage" = `Property Damage`*`Inflation Factor`)
+#### create new variable YearQuarter to contain the year and quarter values (e.g. 1962Q3)
+hazard_data2 <- hazard_data %>%
+  mutate(Q = "Q", YearQuarter = NA)
+hazard_data2$YearQuarter <- paste(hazard_data2$Year, hazard_data2$Q, hazard_data2$Quarter, sep = "")
+hazard_data2 <- hazard_data2 %>% 
+  dplyr::select(., -c("Quarter", "Year", "Q")) %>%
+  arrange(YearQuarter)
+#### group data by YearQuarter
+##### create the sequence of year and quarters to left join data to
+year_vector <- as.character(seq(1960, 2020, 1))
+quarter_vector <- as.character(rep(c(1,2,3,4),61))
+year_quarter_vector <- paste(year_vector, "Q", quarter_vector, sep = "")
+year_quarter_df <- data.frame(YearQuarter = year_quarter_vector) %>% 
+  arrange(YearQuarter) 
+hazard_data2 <- left_join(year_quarter_df, hazard_data2) %>%
+  replace(., is.na(.),0)
+
+# DATA VALIDATION ====
+
+## Creating Training and Testing sets for validation
+
+hazard_data2 <- arrange(hazard_data2, YearQuarter)
+
+### hold out 5 years
+yearquarter_5y <- c("2016Q1","2016Q2","2016Q3","2016Q4",
+                    "2017Q1","2017Q2","2017Q3","2017Q4",
+                    "2018Q1","2018Q2","2018Q3","2018Q4",
+                    "2019Q1","2019Q2","2019Q3","2019Q4",
+                    "2020Q1","2020Q2","2020Q3","2020Q4")
+train_5y <- hazard_data2 %>% filter(!YearQuarter %in% yearquarter_5y)
+test_5y <- hazard_data2 %>% filter(YearQuarter %in% yearquarter_5y)
+
+### hold out 3 years
+yearquarter_3y <- c("2018Q1","2018Q2","2018Q3","2018Q4",
+                    "2019Q1","2019Q2","2019Q3","2019Q4",
+                    "2020Q1","2020Q2","2020Q3","2020Q4")
+train_3y <- hazard_data2 %>% filter(!YearQuarter %in% yearquarter_3y)
+test_3y <- hazard_data2 %>% filter(YearQuarter %in% yearquarter_3y)
+
+### hold out 1 year
+yearquarter_1y <- c("2020Q1","2020Q2","2020Q3","2020Q4")
+train_1y <- hazard_data2 %>% filter(!YearQuarter %in% yearquarter_1y)
+test_1y <- hazard_data2 %>% filter(YearQuarter %in% yearquarter_1y)
+
+### create list of validation data sets
+validation_data <- list(train_5y, train_3y, train_1y, test_5y, test_3y, test_1y)
+
+### create a list to contain validation data sets for each time frame and region (total 36 objects)
+region_data <- list()
+for(i in 1:6){
+  for(j in 1:6){
+    region_data[[(i-1)*6+j]] <- validation_data[[j]] %>%
+      filter(Region == i) %>%
+      group_by(YearQuarter) %>% 
+      summarise(total.damage = sum(`Property Damage`),
+                total.inf.damage = sum(`Inflated Damage`),
+                total.duration = sum(Duration),
+                total.fatalities = sum(Fatalities),
+                total.injuries = sum(Injuries),
+                no.events = n(),
+                avg.damage = total.damage/no.events,
+                avg.inf.damage = total.inf.damage/no.events) %>%
+      mutate(YearQuarter = as.character(YearQuarter)) %>%
+      left_join(year_quarter_df, .) %>%
+      replace(., is.na(.),0)
+  }
+}
+for(i in 1:6){
+  region_data[[(i-1)*6+1]] <- region_data[[(i-1)*6+1]][-c(225:244),]
+  region_data[[(i-1)*6+2]] <- region_data[[(i-1)*6+2]][-c(233:244),]
+  region_data[[(i-1)*6+3]] <- region_data[[(i-1)*6+3]][-c(241:244),]  
+  region_data[[(i-1)*6+4]] <- region_data[[(i-1)*6+4]][-c(1:224),]  
+  region_data[[(i-1)*6+5]] <- region_data[[(i-1)*6+5]][-c(1:232),]
+  region_data[[(i-1)*6+6]] <- region_data[[(i-1)*6+6]][-c(1:240),]
+}
+region_data[[1]] <- region_data[[1]][-c(225:244)]
+names_data <- c("train_5y_region1", "train_3y_region1", "train_1y_region1",
+                "test_5y_region1", "test_3y_region1", "test_1y_region1",
+                "train_5y_region2", "train_3y_region2", "train_1y_region2",
+                "test_5y_region2", "test_3y_region2", "test_1y_region2",
+                "train_5y_region3", "train_3y_region3", "train_1y_region3",
+                "test_5y_region3", "test_3y_region3", "test_1y_region3",
+                "train_5y_region4", "train_3y_region4", "train_1y_region4",
+                "test_5y_region4", "test_3y_region4", "test_1y_region4",
+                "train_5y_region5", "train_3y_region5", "train_1y_region5",
+                "test_5y_region5", "test_3y_region5", "test_1y_region5",
+                "train_5y_region6", "train_3y_region6", "train_1y_region6",
+                "test_5y_region6", "test_3y_region6", "test_1y_region6")
+names(region_data) <- names_data
+
+# MODELLING ====
+
+## Fitting Frequency Models
+
+### fit frequency and severity by region for each training set
+#### frequency - fit to poisson and negative binomial
+freq_descdist <- list()
+freq_poisson <- list()
+freq_negbin <- list()
+k <- 1
+for(i in 1:6){
+  for(j in 1:3){
+    freq_descdist[[k]] <- descdist(region_data[[(i-1)*6+j]]$no.events, 
+                                   discrete = TRUE)
+    freq_poisson[[k]] <- fitdist(region_data[[(i-1)*6+j]]$no.events, 
+                                 "pois", method = "mle")
+    freq_negbin[[k]] <- fitdist(region_data[[(i-1)*6+j]]$no.events, 
+                                "nbinom", method = "mle")
+    k <- k+1
+  }
+}
+names(freq_descdist) <- c("freq_descdist_5y_region1", "freq_descdist_3y_region1", 
+                          "freq_descdist_1y_region1", "freq_descdist_5y_region2", 
+                          "freq_descdist_3y_region2", "freq_descdist_1y_region2",
+                          "freq_descdist_5y_region3", "freq_descdist_3y_region3",
+                          "freq_descdist_1y_region3", "freq_descdist_5y_region4",
+                          "freq_descdist_3y_region4", "freq_descdist_1y_region4",
+                          "freq_descdist_5y_region5", "freq_descdist_3y_region5",
+                          "freq_descdist_1y_region5", "freq_descdist_5y_region6",
+                          "freq_descdist_3y_region6", "freq_descdist_1y_region6")
+names(freq_poisson) <- c("freq_poisson_5y_region1", "freq_poisson_3y_region1", 
+                         "freq_poisson_1y_region1", "freq_poisson_5y_region2", 
+                         "freq_poisson_3y_region2", "freq_poisson_1y_region2",
+                         "freq_poisson_5y_region3", "freq_poisson_3y_region3",
+                         "freq_poisson_1y_region3", "freq_poisson_5y_region4",
+                         "freq_poisson_3y_region4", "freq_poisson_1y_region4",
+                         "freq_poisson_5y_region5", "freq_poisson_3y_region5",
+                         "freq_poisson_1y_region5", "freq_poisson_5y_region6",
+                         "freq_poisson_3y_region6", "freq_poisson_1y_region6")
+names(freq_negbin) <- c("freq_negbin_5y_region1", "freq_negbin_3y_region1", 
+                        "freq_negbin_1y_region1", "freq_negbin_5y_region2", 
+                        "freq_negbin_3y_region2", "freq_negbin_1y_region2",
+                        "freq_negbin_5y_region3", "freq_negbin_3y_region3",
+                        "freq_negbin_1y_region3", "freq_negbin_5y_region4",
+                        "freq_negbin_3y_region4", "freq_negbin_1y_region4",
+                        "freq_negbin_5y_region5", "freq_negbin_3y_region5",
+                        "freq_negbin_1y_region5", "freq_negbin_5y_region6",
+                        "freq_negbin_3y_region6", "freq_negbin_1y_region6")
+for(i in 1:18){
+  plot(freq_poisson[[i]])
+  plot(freq_negbin[[i]])
+}
+
+
+## Fitting Severity Models
+
+### severity - log damage fit to normal, gamma and weibull
+sev_region_data <- list()
+for(i in 1:36){
+  sev_region_data[[i]] <- region_data[[i]] %>% 
+    filter(avg.inf.damage > 0) %>% 
+    mutate(log.avg.inf.damage = log(avg.inf.damage))
+}
+names(sev_region_data) <- names_data
+sev_descdist <- list()
+sev_norm <- list()
+sev_gamma <- list()
+sev_weibull <- list()
+k <- 1
+for(i in 1:6){
+  for(j in 1:3){
+    sev_descdist[[k]] <- descdist(sev_region_data[[(i-1)*6+j]]$log.avg.inf.damage, 
+                                  discrete = FALSE)
+    sev_norm[[k]] <- fitdist(sev_region_data[[(i-1)*6+j]]$log.avg.inf.damage, 
+                             "norm", method = "mle")
+    plot(sev_norm[[k]])
+    sev_gamma[[k]] <- fitdist(sev_region_data[[(i-1)*6+j]]$log.avg.inf.damage, 
+                              "gamma", method = "mle")
+    plot(sev_gamma[[k]])
+    sev_weibull[[k]] <- fitdist(sev_region_data[[(i-1)*6+j]]$log.avg.inf.damage, 
+                                "weibull", method = "mle")
+    plot(sev_weibull[[k]])
+    k <- k+1
+  }
+}
+
+names(sev_descdist) <- c("sev_descdist_5y_region1", "sev_descdist_3y_region1", 
+                         "sev_descdist_1y_region1", "sev_descdist_5y_region2", 
+                         "sev_descdist_3y_region2", "sev_descdist_1y_region2",
+                         "sev_descdist_5y_region3", "sev_descdist_3y_region3",
+                         "sev_descdist_1y_region3", "sev_descdist_5y_region4",
+                         "sev_descdist_3y_region4", "sev_descdist_1y_region4",
+                         "sev_descdist_5y_region5", "sev_descdist_3y_region5",
+                         "sev_descdist_1y_region5", "sev_descdist_5y_region6",
+                         "sev_descdist_3y_region6", "sev_descdist_1y_region6")
+names(sev_norm) <- c("sev_norm_5y_region1", "sev_norm_3y_region1", 
+                     "sev_norm_1y_region1", "sev_norm_5y_region2", 
+                     "sev_norm_3y_region2", "sev_norm_1y_region2",
+                     "sev_norm_5y_region3", "sev_norm_3y_region3",
+                     "sev_norm_1y_region3", "sev_norm_5y_region4",
+                     "sev_norm_3y_region4", "sev_norm_1y_region4",
+                     "sev_norm_5y_region5", "sev_norm_3y_region5",
+                     "sev_norm_1y_region5", "sev_norm_5y_region6",
+                     "sev_norm_3y_region6", "sev_norm_1y_region6")
+names(sev_gamma) <- c("sev_gamma_5y_region1", "sev_gamma_3y_region1", 
+                      "sev_gamma_1y_region1", "sev_gamma_5y_region2", 
+                      "sev_gamma_3y_region2", "sev_gamma_1y_region2",
+                      "sev_gamma_5y_region3", "sev_gamma_3y_region3",
+                      "sev_gamma_1y_region3", "sev_gamma_5y_region4",
+                      "sev_gamma_3y_region4", "sev_gamma_1y_region4",
+                      "sev_gamma_5y_region5", "sev_gamma_3y_region5",
+                      "sev_gamma_1y_region5", "sev_gamma_5y_region6",
+                      "sev_gamma_3y_region6", "sev_gamma_1y_region6")
+names(sev_weibull) <- c("sev_weibull_5y_region1", "sev_weibull_3y_region1", 
+                        "sev_weibull_1y_region1", "sev_weibull_5y_region2", 
+                        "sev_weibull_3y_region2", "sev_weibull_1y_region2",
+                        "sev_weibull_5y_region3", "sev_weibull_3y_region3",
+                        "sev_weibull_1y_region3", "sev_weibull_5y_region4",
+                        "sev_weibull_3y_region4", "sev_weibull_1y_region4",
+                        "sev_weibull_5y_region5", "sev_weibull_3y_region5",
+                        "sev_weibull_1y_region5", "sev_weibull_5y_region6",
+                        "sev_weibull_3y_region6", "sev_weibull_1y_region6")
+
+# MODEL ASSESSMENT ====
+
+## Distribution Metrics
+
+rownames <- c("region1_5y", "region1_3y", "region1_1y",
+              "region2_5y", "region2_3y", "region2_1y",
+              "region3_5y", "region3_3y", "region3_1y",
+              "region4_5y", "region4_3y", "region4_1y",
+              "region5_5y", "region5_3y", "region5_1y",
+              "region6_5y", "region6_3y", "region6_1y")
+
+### frequency
+freq_fit_table <- data.frame("Poisson_AIC" = rep(0,18), "Poisson_BIC" = rep(0,18),
+                             "Negbin_AIC" = rep(0,18), "Negbin_BIC" = rep(0,18),
+                             "Best_AIC" = rep(NA,18), "Best_BIC" = rep(NA,18),
+                             row.names = rownames)
+for(i in 1:18){
+  freq_fit_table[i,1] <- freq_poisson[[i]]$aic
+  freq_fit_table[i,2] <- freq_poisson[[i]]$bic
+  freq_fit_table[i,3] <- freq_negbin[[i]]$aic
+  freq_fit_table[i,4] <- freq_negbin[[i]]$bic
+  freq_fit_table[i,5] <- if_else(which.min(c(freq_poisson[[i]]$aic,freq_negbin[[i]]$aic))==1, "Poisson", "Negbin")
+  freq_fit_table[i,6] <- if_else(which.min(c(freq_poisson[[i]]$bic,freq_negbin[[i]]$bic))==1, "Poisson", "Negbin")
+}
+
+### severity
+sev_fit_table <- data.frame("Norm_AIC" = rep(0,18), "Norm_BIC" = rep(0,18),
+                            "Gamma_AIC" = rep(0,18), "Gamma_BIC" = rep(0,18),
+                            "Weibull_AIC" = rep(0,18), "Weibull_BIC" = rep(0,18),
+                            "Best_AIC" = rep(NA,18), "Best_BIC" = rep(NA,18),
+                            row.names = rownames)
+for(i in 1:18){
+  sev_fit_table[i,1] <- sev_norm[[i]]$aic
+  sev_fit_table[i,2] <- sev_norm[[i]]$bic
+  sev_fit_table[i,3] <- sev_gamma[[i]]$aic
+  sev_fit_table[i,4] <- sev_gamma[[i]]$bic
+  sev_fit_table[i,5] <- sev_weibull[[i]]$aic
+  sev_fit_table[i,6] <- sev_weibull[[i]]$bic
+  sev_fit_table[i,7] <- if_else(which.min(c(sev_norm[[i]]$aic,sev_gamma[[i]]$aic, sev_weibull[[i]]$aic))==1, "Norm", 
+                                if_else(which.min(c(sev_norm[[i]]$aic,sev_gamma[[i]]$aic, sev_weibull[[i]]$aic))==2, "Gamma",
+                                        if_else(which.min(c(sev_norm[[i]]$aic,sev_gamma[[i]]$aic, sev_weibull[[i]]$aic))==3, "Weibull", "None")))
+  sev_fit_table[i,8] <- if_else(which.min(c(sev_norm[[i]]$bic,sev_gamma[[i]]$bic, sev_weibull[[i]]$bic))==1, "Norm", 
+                                if_else(which.min(c(sev_norm[[i]]$bic,sev_gamma[[i]]$bic, sev_weibull[[i]]$bic))==2, "Gamma",
+                                        if_else(which.min(c(sev_norm[[i]]$bic,sev_gamma[[i]]$bic, sev_weibull[[i]]$bic))==3, "Weibull", "None")))
+}
+
+### empirical value at risk
+ordered_data <- list()
+emp_VaR_5 <- rep(0,18)
+emp_VaR_95 <- rep(0,18)
+weibull_VaR_5 <- rep(0,18)
+weibull_VaR_95 <- rep(0,18)
+k <- 1
+for(i in 1:6){
+  for(j in 1:3){
+    ordered_data[[k]] <- arrange(region_data[[(i-1)*6+j]], total.inf.damage)
+    emp_VaR_5[k] <- as.numeric(ordered_data[[k]][ceiling(dim(region_data[[(i-1)*6+j]])[1]*0.05),3])
+    emp_VaR_95[k] <- as.numeric(ordered_data[[k]][ceiling(dim(region_data[[(i-1)*6+j]])[1]*0.95),3])
+    k <- k+1
+  }
+}
+empirical_VaR_table <- data.frame("Empirical_0.05_VaR" = emp_VaR_5, 
+                                  "Empirical_0.95_VaR" = emp_VaR_95,
+                                  row.names = rownames)
+
+# MODEL PREDICTION ====
+
+## Predicting on Test Set
+
+### predict average frequency and severity by region for each test set
+### pull parameters
+freq_poisson_param <- list()
+freq_negbin_param <- list()
+sev_norm_param <- list()
+sev_gamma_param <- list()
+sev_weibull_param <- list()
+for(i in 1:18){
+  freq_poisson_param[[i]] <- freq_poisson[[i]][["estimate"]][["lambda"]]
+  freq_negbin_param[[i]] <- c(freq_negbin[[i]][["estimate"]][["size"]],freq_negbin[[i]][["estimate"]][["mu"]])
+  sev_norm_param[[i]] <- c(sev_norm[[i]][["estimate"]][["mean"]],sev_norm[[i]][["estimate"]][["sd"]])
+  sev_gamma_param[[i]] <- c(sev_gamma[[i]][["estimate"]][["shape"]],sev_gamma[[i]][["estimate"]][["rate"]])
+  sev_weibull_param[[i]] <- c(sev_weibull[[i]][["estimate"]][["shape"]],sev_weibull[[i]][["estimate"]][["scale"]])
+}
+
+### simulate forecast values and confidence bands (for negbin and weibull for 5y)
+freq_negbin_fc <- rep(0,20)
+freq_negbin_lower <- rep(0,20)
+freq_negbin_upper <-rep(0,20)
+sev_weibull_fc <- rep(0,20)
+sev_weibull_lower <- rep(0,20)
+sev_weibull_upper <- rep(0,20)
+region1_fc <- data.frame(freq_negbin_lower, freq_negbin_fc, freq_negbin_upper,
+                         sev_weibull_lower, sev_weibull_fc, sev_weibull_upper,
+                         YearQuarter = c(year_quarter_df[225:244,1]))
+region2_fc <- data.frame(freq_negbin_lower, freq_negbin_fc, freq_negbin_upper,
+                         sev_weibull_lower, sev_weibull_fc, sev_weibull_upper,
+                         YearQuarter = c(year_quarter_df[225:244,1]))
+region3_fc <- data.frame(freq_negbin_lower, freq_negbin_fc, freq_negbin_upper,
+                         sev_weibull_lower, sev_weibull_fc, sev_weibull_upper,
+                         YearQuarter = c(year_quarter_df[225:244,1]))
+region4_fc <- data.frame(freq_negbin_lower, freq_negbin_fc, freq_negbin_upper,
+                         sev_weibull_lower, sev_weibull_fc, sev_weibull_upper,
+                         YearQuarter = c(year_quarter_df[225:244,1]))
+region5_fc <- data.frame(freq_negbin_lower, freq_negbin_fc, freq_negbin_upper,
+                         sev_weibull_lower, sev_weibull_fc, sev_weibull_upper,
+                         YearQuarter = c(year_quarter_df[225:244,1]))
+region6_fc <- data.frame(freq_negbin_lower, freq_negbin_fc, freq_negbin_upper,
+                         sev_weibull_lower, sev_weibull_fc, sev_weibull_upper,
+                         YearQuarter = c(year_quarter_df[225:244,1]))
+region_forecast <- list(region1_fc, region2_fc, region3_fc, region4_fc, region5_fc, region6_fc)
+
+
+set.seed(10112)
+n <- 20
+alpha <- 0.975
+for(i in 1:1){
+  region_forecast[[i]][,1] <- qnbinom(1-alpha, size = freq_negbin_param[[1+(i-1)*3]][[1]],
+                                      mu = freq_negbin_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,2] <- rnbinom(n, size = freq_negbin_param[[1+(i-1)*3]][[1]],
+                                      mu = freq_negbin_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,3] <- qnbinom(alpha, size = freq_negbin_param[[1+(i-1)*3]][[1]],
+                                      mu = freq_negbin_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,4] <- qweibull(1-alpha, shape = sev_weibull_param[[1+(i-1)*3]][[1]],
+                                       scale = sev_weibull_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,5] <- rweibull(n, shape = sev_weibull_param[[1+(i-1)*3]][[1]],
+                                       scale = sev_weibull_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,6] <- qweibull(alpha, shape = sev_weibull_param[[1+(i-1)*3]][[1]],
+                                       scale = sev_weibull_param[[1+(i-1)*3]][[2]])
+}
+
+for(i in 2:6){
+  region_forecast[[i]][,1] <- qnbinom(1-alpha, size = freq_negbin_param[[1+(i-1)*3]][[1]],
+                                      mu = freq_negbin_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,2] <- rnbinom(n, size = freq_negbin_param[[1+(i-1)*3]][[1]],
+                                      mu = freq_negbin_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,3] <- qnbinom(alpha, size = freq_negbin_param[[1+(i-1)*3]][[1]],
+                                      mu = freq_negbin_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,4] <- qgamma(1-alpha, shape = sev_gamma_param[[1+(i-1)*3]][[1]],
+                                     rate = sev_gamma_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,5] <- rgamma(n, shape = sev_gamma_param[[1+(i-1)*3]][[1]],
+                                     rate = sev_gamma_param[[1+(i-1)*3]][[2]])
+  region_forecast[[i]][,6] <- qgamma(alpha, shape = sev_gamma_param[[1+(i-1)*3]][[1]],
+                                     rate = sev_gamma_param[[1+(i-1)*3]][[2]])
+}
+
+
+### plotting frequency estimates
+freq_plot <- list()
+k <- 1
+for(i in 1:6){
+  for(j in 1:3){
+    freq_plot[[k]] <- ggplot() +
+      geom_line(data = region_data[[(i-1)*6+j]], aes(x = YearQuarter, y = no.events, group = 1)) +
+      geom_point(data = region_data[[(i-1)*6+j]], aes(x = YearQuarter, y = no.events, group = 1)) + 
+      geom_line(data = region_data[[3+(i-1)*6+j]], aes(x = YearQuarter, y = no.events, group = 1), col = "blue") + 
+      geom_point(data = region_data[[3+(i-1)*6+j]], aes(x = YearQuarter, y = no.events, group = 1), col = "blue") + 
+      geom_line(data = region_forecast[[i]], aes(x = YearQuarter, y = freq_negbin_fc), group = 1, linetype="dashed", color = "red") +
+      geom_point(data = region_forecast[[i]], aes(x = YearQuarter, y = freq_negbin_fc), group = 1, color = "red") + 
+      geom_smooth(data = region_forecast[[i]], aes(x = YearQuarter, y = freq_negbin_fc, 
+                                                   ymax = freq_negbin_upper, ymin = freq_negbin_lower, group = 1), 
+                  colour = "red", linetype="dashed", stat = "identity") +
+      geom_point(data = region_forecast[[i]], aes(x = YearQuarter, y = freq_negbin_fc, group = 1), col = "red")
+    k <- k+1
+  }
+  plot(freq_plot[[1+3*(i-1)]])
+}
+
+
+### plotting severity estimates
+
+sev_plot <- list()
+k <- 1
+for(i in 1:6){
+  for(j in 1:3){
+    sev_plot[[k]] <- ggplot() +
+      geom_line(data = sev_region_data[[(i-1)*6+j]], aes(x = YearQuarter, y = log(avg.inf.damage), group = 1)) +
+      geom_point(data = sev_region_data[[(i-1)*6+j]], aes(x = YearQuarter, y = log(avg.inf.damage), group = 1)) + 
+      geom_line(data = sev_region_data[[3+(i-1)*6+j]], aes(x = YearQuarter, y = log(avg.inf.damage), group = 1), col = "blue") + 
+      geom_point(data = sev_region_data[[3+(i-1)*6+j]], aes(x = YearQuarter, y = log(avg.inf.damage), group = 1), col = "blue") + 
+      geom_smooth(data = region_forecast[[i]], aes(x = YearQuarter, y = sev_weibull_fc, 
+                                                   ymax = sev_weibull_upper, ymin = sev_weibull_lower, group = 1), 
+                  colour = "red", linetype = "dashed", stat = "identity") + 
+      geom_point(data = region_forecast[[i]], aes(x = YearQuarter, y = sev_weibull_fc, group = 1), col = "red")
+    k <- k+1
+  }
+  plot(sev_plot[[1+3*(i-1)]])
+}
+
+# SENSITIVITY ANALYSIS ====
+
+## Performing sensitivity analysis
+
+lower.freq.est <- rep(0,6)
+mean.freq.est <- rep(0,6)
+upper.freq.est <- rep(0,6)
+lower.sev.est <- rep(0,6)
+mean.sev.est <- rep(0,6)
+upper.sev.est <- rep(0,6)
+for(i in 1:6){
+  lower.freq.est[i] <- mean(region_forecast[[i]][,1])
+  mean.freq.est[i] <- mean(region_forecast[[i]][,2])
+  upper.freq.est[i] <- mean(region_forecast[[i]][,3])
+  lower.sev.est[i] <- mean(exp(region_forecast[[i]][,4]))
+  mean.sev.est[i] <- mean(exp(region_forecast[[i]][,5]))
+  upper.sev.est[i] <- mean(exp(region_forecast[[i]][,6]))
+}
+freq_sev_est <- data.frame("Lower_Freq_Est" = lower.freq.est, "Mean_Freq_Est" = mean.freq.est, "Upper_Freq_Est" = upper.freq.est,
+                           "Lower_Sev_Est" = lower.sev.est, "Mean_Sev_Est" = mean.sev.est, "Upper_Sev_Est" = upper.sev.est,
+                           "Mean_Damage_Est" = mean.freq.est*mean.sev.est, "Upper_Damage_Est" = upper.freq.est*upper.sev.est,
+                           row.names = c("Region_1", "Region_2", "Region_3", "Region_4", "Region_5", "Region_6"))
+
+# ECONOMIC COSTS ====
+
+## Estimating Economic costs wihtout the scheme 
+
+### Demographic Data
+
+head(region_demo)
+mean_damage_est <- freq_sev_est[7] %>% 
+  cbind(., region_demo[,c(1:3,6,18)]) %>%
+  dplyr::mutate(Cost_pp_2019 = Mean_Damage_Est/`Census, July 1, 2019`,
+                Cost_pp_2020 = Mean_Damage_Est/`Census, July 1, 2020`,
+                Cost_pp_2021 = Mean_Damage_Est/`Census, July 1, 2021`,
+                Cost_per_hu = Mean_Damage_Est/`Housing Units`,
+                Cost_per_hh = Mean_Damage_Est/`Households, 2016-2020`)
+mean_damage_est
+upper_damage_est <- freq_sev_est[8] %>%
+  cbind(., region_demo[,c(1:3,6,18)]) %>%
+  dplyr::mutate(Cost_pp_2019 = Upper_Damage_Est/`Census, July 1, 2019`,
+                Cost_pp_2020 = Upper_Damage_Est/`Census, July 1, 2020`,
+                Cost_pp_2021 = Upper_Damage_Est/`Census, July 1, 2021`,
+                Cost_per_hu = Upper_Damage_Est/`Housing Units`,
+                Cost_per_hh = Upper_Damage_Est/`Households, 2016-2020`)
+upper_damage_est
+
+
+### Housing Costs
+
+#### Because of a surge in demand after weather events, material and labor costs associated with housing and relocation increase between 0% and 50% after weather events. 
+#### Storslysia’s laws limit the price increases to 50% in these situations.
+#### The cost of replacing household goods typically ranges from 40% to 75% of housing costs.
+#### Estimate number of houses damaged by dividing total damage by median property value
+
+median.prop.value <- c(275000, 275000, 225000, 125000, 175000, 175000)
+house.damage.est <- freq_sev_est[,7:8] %>%
+  mutate(Median_prop_value = median.prop.value,
+         Mean_no.prop = ceiling(Mean_Damage_Est/Median_prop_value),
+         Upper_no.prop = ceiling(Upper_Damage_Est/Median_prop_value))
+         
+#### Assume temporary housing for a year (12 months)
+#### multiple temporary housing cost by average no. people per household
+house.damage.est <- house.damage.est %>%
+  mutate("Temporary Housing (1 month)" = region_demo[,30]*region_demo[,19])
+
+#### Replace goods - 60% increase
+#### From ABS 2009-10
+#### 125000 ~ 35% house value
+#### 175000 ~ 40% house value
+#### 225000 ~ 45% house value
+#### 275000 ~ 50% house value
+house.damage.est <- house.damage.est %>%
+  mutate("Home Contents" = median.prop.value*c(0.5, 0.5, 0.45, 0.35, 0.4, 0.4))
+
+#### For average catastrophes - estimate inflation for material and labour costs to be 25% and replacing household goods to be 57.5%
+#### For severe catastrophes - estimate inflation for material and labour costs to be 50% and replacing household goods to be 75%
+house.damage.est <- house.damage.est %>%
+  mutate(Mean_Disp_cost = (Median_prop_value*1.25 + `Temporary Housing (1 month)`*12*1.25 + `Home Contents`*1.575)*Mean_no.prop*4,
+         Upper_Disp_cost = (Median_prop_value*1.5 + `Temporary Housing (1 month)`*12*1.5 + `Home Contents`*1.75)*Upper_no.prop*4)
+
+#### multiply displacement cost by 4 since predicted damage is per quarter
+#### sum across all 6 regions
+#### multiply damage by 4 since predicted damage is per quarter
+mean.economic.cost <- sum(house.damage.est$Mean_Damage_Est)*4 + sum(house.damage.est$Mean_Disp_cost)
+print("Mean economic cost")
+mean.economic.cost
+upper.economic.cost <- sum(house.damage.est$Upper_Damage_Est)*4 + sum(house.damage.est$Upper_Disp_cost)
+print("Upper economic cost")
+upper.economic.cost
+#### multiply by 1000
+total.GDP <- sum(region_demo$`GDP, 2020 (Ꝕ1,000 )`)*1000
+ten.per.GDP <- total.GDP*0.1
+print("Total GDP (2020)")
+total.GDP
+print("10% GDP (2020)")
+ten.per.GDP
+#### 129 billion
+
+# PERFORMANCE METRICS ====
+
+## Performance Metrics of Cost Model
+
+true.value <- hazard_data %>% filter(Year >= 2016) %>% summarise(total.damage = sum(`Inflated Damage`), n=n())
+all.freq.estimate <- sum(freq_sev_est$Mean_Freq_Est)
+all.sev.estimate <- sum(freq_sev_est$Mean_Sev_Est)
+all.damage.estimate <- sum(freq_sev_est$Mean_Damage_Est)
+true.value$total.damage
+all.damage.estimate*20
+(true.value$total.damage-all.damage.estimate*20)/true.value$total.damage
+true.value$n
+all.freq.estimate*20
+(true.value$n-all.freq.estimate*20)/true.value$n
+all.damage.estimate
+all.freq.estimate
+all.damage.estimate/all.freq.estimate
+
+# SENSITIVITY ANALYSIS WITH CLIMATE SCENARIOS ====
+
+sensitivity <- emissions_data[, 1] %>%
+  mutate("Mean_SSP1" = emissions_data$`RAF-SSP1-2.6`*mean.economic.cost,
+         "Mean_SSP2" = emissions_data$`RAF-SSP2-3.4`*mean.economic.cost,
+         "Mean_SSP3" = emissions_data$`RAF-SSP3-6.0`*mean.economic.cost,
+         "Mean_SSP5" = emissions_data$`RAF-SSP5-Baseline`*mean.economic.cost,
+         "Upper_SSP1" = emissions_data$`RAF-SSP1-2.6`*upper.economic.cost,
+         "Upper_SSP2" = emissions_data$`RAF-SSP2-3.4`*upper.economic.cost,
+         "Upper_SSP3" = emissions_data$`RAF-SSP3-6.0`*upper.economic.cost,
+         "Upper_SSP5" = emissions_data$`RAF-SSP5-Baseline`*upper.economic.cost)
+GDP_growth <- SSP_scenarios_data[,c(1,10:13)] %>%
+  replace(., is.na(.),0) %>%
+  mutate("Growth_SSP1" = rep(0,16),
+         "Growth_SSP2" = rep(0,16),
+         "Growth_SSP3" = rep(0,16),
+         "Growth_SSP5" = rep(0,16))
+for(i in 2:11){
+  for(j in 6:9){
+    GDP_growth[i,j] <- (GDP_growth[i,j-4]-GDP_growth[i-1,j-4])/GDP_growth[i-1,j-4]
+  }
+}
+for(i in 12:16){
+  for(j in 6:9){
+    GDP_growth[i,j] <- exp(mean(log(pull(GDP_growth[2:11,j]))))
+  }
+}
+GDP_growth <- GDP_growth %>%
+  mutate("GDP_SSP1" = (1+Growth_SSP1)*total.GDP,
+         "GDP_SSP2" = (1+Growth_SSP2)*total.GDP,
+         "GDP_SSP3" = (1+Growth_SSP3)*total.GDP,
+         "GDP_SSP5" = (1+Growth_SSP5)*total.GDP)
+for(i in 2:16){
+  for(j in 10:13){
+    GDP_growth[i,j] <- GDP_growth[i-1,j]*(1+GDP_growth[i,j-4])
+  }
+}
+sensitivity <- cbind(sensitivity, GDP_growth[3:16,10:13])
+## in $'000,000 
+sensitivity_mil <- sensitivity
+sensitivity_mil[,2:13] <- sensitivity[,2:13]/1000000
+sensitivity_mil
+
+## different colour for each emission scenario
+colours <- c("SSP1" = "green", "SSP2" = "yellow", "SSP3" = "orange", "SSP5" = "red")
+ggplot(data = sensitivity_mil) +
+  geom_smooth(aes(x = Year, y = log(Mean_SSP1), ymax = log(Upper_SSP1), ymin = log(Mean_SSP1), group = 1, colour = "SSP1"), stat = "identity") + 
+  geom_smooth(aes(x = Year, y = log(Mean_SSP2), ymax = log(Upper_SSP2), ymin = log(Mean_SSP2), group = 1, colour = "SSP2"), stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(Mean_SSP3), ymax = log(Upper_SSP3), ymin = log(Mean_SSP3), group = 1, colour = "SSP3"), stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(Mean_SSP5), ymax = log(Upper_SSP5), ymin = log(Mean_SSP5), group = 1, colour = "SSP5"), stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP1*0.1), group = 1, colour = "SSP1"), linetype = "dashed", stat = "identity") + 
+  geom_smooth(aes(x = Year, y = log(GDP_SSP2*0.1), group = 1, colour = "SSP2"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP3*0.1), group = 1, colour = "SSP3"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP5*0.1), group = 1, colour = "SSP5"), linetype = "dashed", stat = "identity") +
+  labs(x = "Year", y = "Economic Cost (Ꝕ million)", colour = "Legend") +
+  scale_colour_manual(values = colours)
+## solid line represents the mean economic cost
+## dashed line represents 10% GDP
+## y-axis is on a log scale because it's too hard to see the divergence otherwise
+
+## GDP graph on its own
+ggplot(data = sensitivity_mil) +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP1*0.1), group = 1, colour = "SSP1"), linetype = "dashed", stat = "identity") + 
+  geom_smooth(aes(x = Year, y = log(GDP_SSP2*0.1), group = 1, colour = "SSP2"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP3*0.1), group = 1, colour = "SSP3"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP5*0.1), group = 1, colour = "SSP5"), linetype = "dashed", stat = "identity") +
+  labs(x = "Year", y = "Economic Cost (Ꝕ million)", colour = "Legend") +
+  scale_colour_manual(values = colours)
+
+
+## Summary of mean damange per region per person
+freq_sev_est$Mean_Damage_Est/(as.numeric(eco_dem_data[1, 2:7]))
+
+
+# MODELLING WITH THE SCHEME AND ITS COSTS ====
+
+## Computing damange per region to determine which regions are at risk 
+
+hazard_data_region1 <- hazard_data %>%
+  filter(Region == 1) 
+reg1_ppdamange <- sum(hazard_data_region1$`Inflated Damage`)/as.numeric(eco_dem_data[1,2])
+
+hazard_data_region2 <- hazard_data %>%
+  filter(Region == 2) 
+reg2_ppdamange <- sum(hazard_data_region2$`Inflated Damage`)/as.numeric(eco_dem_data[1,3])
+
+hazard_data_region3 <- hazard_data %>%
+  filter(Region == 3) 
+reg3_ppdamange <- sum(hazard_data_region3$`Inflated Damage`)/as.numeric(eco_dem_data[1,4])
+
+hazard_data_region4 <- hazard_data %>%
+  filter(Region == 4) 
+reg4_ppdamange <- sum(hazard_data_region4$`Inflated Damage`)/as.numeric(eco_dem_data[1,5])
+
+hazard_data_region5 <- hazard_data %>%
+  filter(Region == 5) 
+reg5_ppdamange <- sum(hazard_data_region5$`Inflated Damage`)/as.numeric(eco_dem_data[1,6])
+
+hazard_data_region6 <- hazard_data %>%
+  filter(Region == 6) 
+reg6_ppdamange <- sum(hazard_data_region6$`Inflated Damage`)/as.numeric(eco_dem_data[1,7])
+
+regions_atrisk <- as.data.frame(c(reg1_ppdamange, reg2_ppdamange, reg3_ppdamange, reg4_ppdamange, reg5_ppdamange, reg6_ppdamange))
+rownames(regions_atrisk) <- c("Region 1", "Region 2", "Region 3", "Region 4", "Region 5", "Region 6")
+colnames(regions_atrisk) <- c("Per person inflated damage")
+
+regions_atrisk
+
+## For those who take up voluntary relocation, the scheme will pay cost of home up to median home value and pay lump-sum payment of $10000 to cover relocation costs
+
+## Variables
+lumpsum <- 10000
+initial_takeup <- 0.04
+takeup_reduction <- 0.8
+
+
+## Matrix for take-up - for the year and cumulative (or more like a vector)
+takeup_vec1 <- rep(initial_takeup, 100)
+takeup_vec2 <- numeric()
+
+for(i in 1:100){
+  takeup_vec2[i] <- takeup_vec1*takeup_reduction^(i-1)
+}
+
+takeup_vec2
+
+## Cost of voluntary relocation - owner occupiers
+
+### Distribution of home values
+housevalue_dist <- c(25000,75000,125000,175000,225000,275000,350000,450000,625000,875000,1250000,1750000,2000000)
+
+### Relocation from regions 6, 5, 4 and 2: number of relocations
+
+reg6_oohouseholds <- as.numeric(eco_dem_data[7,7])
+
+relocation_reg6 <- as.matrix((takeup_vec2*reg6_oohouseholds))
+
+reg5_oohouseholds <- as.numeric(eco_dem_data[7,6])
+
+relocation_reg5 <- as.matrix((takeup_vec2*reg5_oohouseholds))
+
+reg4_oohouseholds <- as.numeric(eco_dem_data[7,5])
+
+relocation_reg4 <- as.matrix((takeup_vec2*reg4_oohouseholds))
+
+reg2_oohouseholds <- as.numeric(eco_dem_data[7,3])
+
+relocation_reg2 <- as.matrix((takeup_vec2*reg2_oohouseholds))
+
+total_voluntary_relocation <- relocation_reg6+relocation_reg5+relocation_reg4+relocation_reg2
+
+
+### Destination of voluntary relocations
+
+nationaloo_households <- as.numeric(unlist(eco_dem_data[7,2:7]))
+population_lowrisk <- nationaloo_households[1]+nationaloo_households[3]
+proportion_reg1 <- nationaloo_households[1]/population_lowrisk
+proportion_reg3 <- nationaloo_households[3]/population_lowrisk
+
+reg1_arrivals <- as.matrix((total_voluntary_relocation*proportion_reg1))
+reg3_arrivals <- as.matrix((total_voluntary_relocation*proportion_reg3))
+
+### Cost of voluntary relocation - median home value in new region plus lumpsum
+
+median_homereg1 <- extract_numeric(eco_dem_data[8,2])
+median_homereg2 <- extract_numeric(eco_dem_data[8,3])
+median_homereg3 <- extract_numeric(eco_dem_data[8,4])
+median_homereg4 <- extract_numeric(eco_dem_data[8,5])
+median_homereg5 <- extract_numeric(eco_dem_data[8,6])
+median_homereg6 <- extract_numeric(eco_dem_data[8,7])
+
+reg1_voluntaryoo_cost <- (median_homereg1+lumpsum)*reg1_arrivals
+reg3_voluntaryoo_cost <- (median_homereg3+lumpsum)*reg3_arrivals
+
+voluntary_relocation_oo <- reg1_voluntaryoo_cost+reg3_voluntaryoo_cost
+
+
+
+## Cost of voluntary relocation - renters - pay for 6 months rent in the new region, up to the median value of rent in the new region
+
+no_renters <- as.numeric(eco_dem_data[6,2:7])-as.numeric(eco_dem_data[7,2:7])
+relocated_renters <- (sum(no_renters[4:6])+no_renters[2])*takeup_vec2
+
+prop_renters_reg1 <- no_renters[1]/(no_renters[1]+no_renters[3])
+prop_renters_reg3 <- no_renters[3]/(no_renters[1]+no_renters[3])
+
+volrenters_reg1 <- as.matrix((prop_renters_reg1*relocated_renters))
+volrenters_reg3 <- as.matrix((prop_renters_reg3*relocated_renters))
+
+rentcost_reg1 <- volrenters_reg1*(extract_numeric(eco_dem_data[10,2])*6)
+rentcost_reg3 <- volrenters_reg3*(extract_numeric(eco_dem_data[10,4])*6)
+
+total_rental_costs <- rentcost_reg1+rentcost_reg3
+
+
+total_voluntary_costs <- voluntary_relocation_oo+total_rental_costs
+
+
+
+## The number changing population of each region will affect the risk profile of each region
+
+### Computing changes in population in each region under the scheme
+
+national_total_households <- as.numeric(unlist(eco_dem_data[6,2:7]))
+
+reg2_rentaldep <- as.matrix((no_renters[2]*takeup_vec2))
+reg4_rentaldep <- as.matrix((no_renters[4]*takeup_vec2))
+reg5_rentaldep <- as.matrix((no_renters[5]*takeup_vec2))
+reg6_rentaldep <- as.matrix((no_renters[6]*takeup_vec2))
+
+reg1_cumarr <- colCumsums(reg1_arrivals, dim = dim(reg1_arrivals)) + colCumsums(volrenters_reg1, dim = dim(volrenters_reg1))
+reg3_cumarr <- colCumsums(reg3_arrivals, dim = dim(reg3_arrivals)) + colCumsums(volrenters_reg3, dim = dim(volrenters_reg3))
+
+reg2_cumdep <- colCumsums(relocation_reg2, dim = dim(relocation_reg2)) + colCumsums(reg2_rentaldep, dim = dim(reg2_rentaldep))
+reg4_cumdep <- colCumsums(relocation_reg4, dim = dim(relocation_reg4)) + colCumsums(reg4_rentaldep, dim = dim(reg4_rentaldep))
+reg5_cumdep <- colCumsums(relocation_reg5, dim = dim(relocation_reg5)) + colCumsums(reg5_rentaldep, dim = dim(reg4_rentaldep))
+reg6_cumdep <- colCumsums(relocation_reg6, dim = dim(relocation_reg6)) + colCumsums(reg6_rentaldep, dim = dim(reg4_rentaldep))
+
+
+region1_hholds <- national_total_households[1] + reg1_cumarr
+region3_hholds <- national_total_households[3] + reg3_cumarr
+region2_hholds <- national_total_households[2] - reg2_cumdep
+region4_hholds <- national_total_households[4] - reg4_cumdep
+region5_hholds <- national_total_households[5] - reg5_cumdep
+region6_hholds <- national_total_households[6] - reg6_cumdep
+
+region1_growthfactor <- region1_hholds/national_total_households[1]
+region2_growthfactor <- region2_hholds/national_total_households[2]
+region3_growthfactor <- region3_hholds/national_total_households[3]
+region4_growthfactor <- region4_hholds/national_total_households[4]
+region5_growthfactor <- region5_hholds/national_total_households[5]
+region6_growthfactor <- region6_hholds/national_total_households[6]
+
+
+
+## Involuntary relocation - number of households affected by severe weather events 
+
+hazard_data2_1 <- filter(hazard_data2, Region == 1) 
+hazard_data2_reg1 <- hazard_data2_1 %>% 
+  mutate("Properties Damaged" = `Inflated Damage`/median_homereg1)
+
+reg1_affectedhh_perevent <- mean(hazard_data2_reg1$`Properties Damaged`)
+
+
+hazard_data2_2 <- filter(hazard_data2, Region == 2) 
+hazard_data2_reg2 <- hazard_data2_2 %>% 
+  mutate("Properties Damaged" = `Inflated Damage`/median_homereg2)
+
+reg2_affectedhh_perevent <- mean(hazard_data2_reg2$`Properties Damaged`)
+
+
+hazard_data2_3 <- filter(hazard_data2, Region == 3) 
+hazard_data2_reg3 <- hazard_data2_3 %>% 
+  mutate("Properties Damaged" = `Inflated Damage`/median_homereg3)
+
+reg3_affectedhh_perevent <- mean(hazard_data2_reg3$`Properties Damaged`)
+
+
+hazard_data2_4 <- filter(hazard_data2, Region == 4) 
+hazard_data2_reg4 <- hazard_data2_4 %>% 
+  mutate("Properties Damaged" = `Inflated Damage`/median_homereg4)
+
+reg4_affectedhh_perevent <- mean(hazard_data2_reg4$`Properties Damaged`)
+
+
+hazard_data2_5 <- filter(hazard_data2, Region == 5) 
+hazard_data2_reg5 <- hazard_data2_5 %>% 
+  mutate("Properties Damaged" = `Inflated Damage`/median_homereg5)
+
+reg5_affectedhh_perevent <- mean(hazard_data2_reg5$`Properties Damaged`)
+
+
+hazard_data2_6 <- filter(hazard_data2, Region == 6) 
+hazard_data2_reg6 <- hazard_data2_6 %>% 
+  mutate("Properties Damaged" = `Inflated Damage`/median_homereg6)
+
+reg6_affectedhh_perevent <- mean(hazard_data2_reg6$`Properties Damaged`)
+
+
+reg2_meanevents <- freq_negbin$freq_negbin_1y_region2$estimate[2]*4
+reg4_meanevents <- freq_negbin$freq_negbin_1y_region4$estimate[2]*4
+reg5_meanevents <- freq_negbin$freq_negbin_1y_region5$estimate[2]*4
+reg6_meanevents <- freq_negbin$freq_negbin_1y_region6$estimate[2]*4
+
+
+## Involuntary relocation - owner occupiers
+
+reg2_renters <- 1-(as.numeric(eco_dem_data[7,3])/as.numeric(eco_dem_data[6,3]))
+reg4_renters <- 1-(as.numeric(eco_dem_data[7,5])/as.numeric(eco_dem_data[6,5]))
+reg5_renters <- 1-(as.numeric(eco_dem_data[7,6])/as.numeric(eco_dem_data[6,6]))
+reg6_renters <- 1-(as.numeric(eco_dem_data[7,7])/as.numeric(eco_dem_data[6,7]))
+
+### Buyback parameters
+
+buyback_takeup <- 0.2
+household_goods_reimbursed <- 0.3
+temporary_housing_months <- 12
+
+### Temporary housing costs
+
+temporary_housing_reg1 <- extract_numeric(eco_dem_data[30,2])*as.numeric(eco_dem_data[19,2])
+temporary_housing_reg2 <- extract_numeric(eco_dem_data[30,3])*as.numeric(eco_dem_data[19,3])
+temporary_housing_reg3 <- extract_numeric(eco_dem_data[30,4])*as.numeric(eco_dem_data[19,4])
+temporary_housing_reg4 <- extract_numeric(eco_dem_data[30,5])*as.numeric(eco_dem_data[19,5])
+temporary_housing_reg5 <- extract_numeric(eco_dem_data[30,6])*as.numeric(eco_dem_data[19,6])
+temporary_housing_reg6 <- extract_numeric(eco_dem_data[30,7])*as.numeric(eco_dem_data[19,7])
+
+
+### Region 6 buyback costs
+
+#### Region 6 house values 
+
+housevalue_reg6 <-as.numeric(unlist(eco_dem_data[31:43,7]))
+
+housevalue_dist6 <- numeric()
+
+for(i in 1:13){
+  housevalue_dist6[i] <- min(housevalue_dist[i], median_homereg6)
+}
+
+#### Region 6 buyback, temporary housing and replacement good costs
+
+buyback_annualcost_6 <- sum(housevalue_reg6*housevalue_dist6)*reg6_affectedhh_perevent*(1-reg6_renters)*reg6_meanevents*buyback_takeup*region6_growthfactor
+
+reg6_temphousingoo <- reg6_affectedhh_perevent*(1-reg6_renters)*reg6_meanevents*temporary_housing_reg6*temporary_housing_months*region6_growthfactor
+
+involuntarycost_reg6 <- buyback_annualcost_6+reg6_temphousingoo+household_goods_reimbursed*reg6_affectedhh_perevent*(1-reg6_renters)*reg6_meanevents*sum(housevalue_reg6*housevalue_dist6)*region6_growthfactor
+
+region6_popdec_invoo <- as.matrix(rep(((buyback_takeup*reg6_affectedhh_perevent*(1-reg6_renters)*reg6_meanevents)/national_total_households[6]), 100))*region6_growthfactor
+
+region6_growthfactor2 <- region6_growthfactor - colCumsums(region6_popdec_invoo, dim = dim(region6_popdec_invoo))
+
+
+### Region 6 displaced renters cost
+
+reg6_temphousingrent <- reg6_affectedhh_perevent*reg6_renters*reg6_meanevents*temporary_housing_reg6*temporary_housing_months*region6_growthfactor
+reg6_rent_relocators <- reg6_affectedhh_perevent*reg6_renters*reg6_meanevents*buyback_takeup*region6_growthfactor
+
+involuntarycost_reg6 <- involuntarycost_reg6+reg6_temphousingrent+household_goods_reimbursed*reg6_affectedhh_perevent*reg6_renters*reg6_meanevents*sum(housevalue_reg6*housevalue_dist6)*region6_growthfactor
+
+region6_popdec_invrent <- as.matrix(rep(((buyback_takeup*reg6_affectedhh_perevent*reg6_renters*reg6_meanevents)/national_total_households[6]), 100))*region6_growthfactor
+
+region6_growthfactor3 <- region6_growthfactor2 - colCumsums(region6_popdec_invrent, dim = dim(region6_popdec_invrent))
+
+
+
+### Region 5 buyback costs
+
+#### Region 5 house values 
+
+median_homereg5 <- extract_numeric(eco_dem_data[8,6])
+
+housevalue_reg5 <-as.numeric(unlist(eco_dem_data[31:43,6]))
+
+housevalue_dist5 <- numeric()
+
+for(i in 1:13){
+  housevalue_dist5[i] <- min(housevalue_dist[i], median_homereg5)
+}
+
+#### Region 5 buyback, temporary housing and replacement good costs
+
+buyback_annualcost_5 <- sum(housevalue_reg5*housevalue_dist5)*reg5_affectedhh_perevent*(1-reg5_renters)*reg5_meanevents*buyback_takeup*region5_growthfactor
+
+reg5_temphousingoo <- reg5_affectedhh_perevent*(1-reg5_renters)*reg5_meanevents*temporary_housing_reg5*temporary_housing_months*region5_growthfactor
+
+involuntarycost_reg5 <- buyback_annualcost_5+reg5_temphousingoo+household_goods_reimbursed*reg5_affectedhh_perevent*(1-reg5_renters)*reg5_meanevents*sum(housevalue_reg5*housevalue_dist5)*region5_growthfactor
+
+region5_popdec_invoo <- as.matrix(rep(((buyback_takeup*reg5_affectedhh_perevent*(1-reg5_renters)*reg5_meanevents)/national_total_households[5]), 100))*region5_growthfactor
+
+region5_growthfactor2 <- region5_growthfactor - colCumsums(region5_popdec_invoo, dim = dim(region5_popdec_invoo))
+
+
+### Region 5 displaced renters cost
+
+reg5_temphousingrent <- reg5_affectedhh_perevent*reg5_renters*reg5_meanevents*temporary_housing_reg5*temporary_housing_months*region5_growthfactor
+reg5_rent_relocators <- reg5_affectedhh_perevent*reg5_renters*reg5_meanevents*buyback_takeup*region5_growthfactor
+
+involuntarycost_reg5 <- involuntarycost_reg5+reg5_temphousingrent+household_goods_reimbursed*reg5_affectedhh_perevent*reg5_renters*reg5_meanevents*sum(housevalue_reg5*housevalue_dist5)*region5_growthfactor
+
+region5_popdec_invrent <- as.matrix(rep(((buyback_takeup*reg5_affectedhh_perevent*reg5_renters*reg5_meanevents)/national_total_households[5]), 100))*region5_growthfactor
+
+region5_growthfactor3 <- region5_growthfactor2 - colCumsums(region5_popdec_invrent, dim = dim(region5_popdec_invrent))
+
+
+
+
+### Region 4 buyback costs
+
+#### Region 4 house vales
+
+median_homereg4 <- extract_numeric(eco_dem_data[8,5])
+
+housevalue_reg4 <-as.numeric(unlist(eco_dem_data[31:43,5]))
+
+housevalue_dist4 <- numeric()
+
+for(i in 1:13){
+  housevalue_dist4[i] <- min(housevalue_dist[i], median_homereg4)
+}
+
+#### Region 4 buyback, temporary housing and replacement good costs
+
+buyback_annualcost_4 <- sum(housevalue_reg4*housevalue_dist4)*reg4_affectedhh_perevent*(1-reg4_renters)*reg4_meanevents*buyback_takeup*region4_growthfactor
+
+reg4_temphousingoo <- reg4_affectedhh_perevent*(1-reg4_renters)*reg4_meanevents*temporary_housing_reg4*temporary_housing_months*region4_growthfactor
+
+involuntarycost_reg4 <- buyback_annualcost_4+reg4_temphousingoo+household_goods_reimbursed*reg4_affectedhh_perevent*(1-reg4_renters)*reg4_meanevents*sum(housevalue_reg4*housevalue_dist4)*region4_growthfactor
+
+region4_popdec_invoo <- as.matrix(rep(((buyback_takeup*reg4_affectedhh_perevent*(1-reg4_renters)*reg4_meanevents)/national_total_households[4]), 100))*region4_growthfactor
+
+region4_growthfactor2 <- region4_growthfactor - colCumsums(region4_popdec_invoo, dim = dim(region4_popdec_invoo))
+
+
+# Region 4 displaced renters cost
+
+reg4_temphousingrent <- reg4_affectedhh_perevent*reg4_renters*reg4_meanevents*temporary_housing_reg4*temporary_housing_months*region4_growthfactor
+reg4_rent_relocators <- reg4_affectedhh_perevent*reg4_renters*reg4_meanevents*buyback_takeup*region4_growthfactor
+
+involuntarycost_reg4 <- involuntarycost_reg4+reg4_temphousingrent+household_goods_reimbursed*reg4_affectedhh_perevent*reg4_renters*reg4_meanevents*sum(housevalue_reg4*housevalue_dist4)*region4_growthfactor
+
+region4_popdec_invrent <- as.matrix(rep(((buyback_takeup*reg4_affectedhh_perevent*reg4_renters*reg4_meanevents)/national_total_households[4]), 100))*region4_growthfactor
+
+region4_growthfactor3 <- region4_growthfactor2 - colCumsums(region4_popdec_invrent, dim = dim(region4_popdec_invrent))
+
+
+
+### Region 2 buyback costs
+
+#### Region 2 house values 
+
+median_homereg2 <- extract_numeric(eco_dem_data[8,3])
+
+housevalue_reg2 <-as.numeric(unlist(eco_dem_data[31:43,3]))
+
+housevalue_dist2 <- numeric()
+
+for(i in 1:13){
+  housevalue_dist2[i] <- min(housevalue_dist[i], median_homereg2)
+}
+
+#### Region 2 buyback, temporary housing and replacement good costs
+
+buyback_annualcost_2 <- sum(housevalue_reg2*housevalue_dist2)*reg2_affectedhh_perevent*(1-reg2_renters)*reg2_meanevents*buyback_takeup*region2_growthfactor
+
+reg2_temphousingoo <- reg2_affectedhh_perevent*(1-reg2_renters)*reg2_meanevents*temporary_housing_reg2*temporary_housing_months*region2_growthfactor
+
+involuntarycost_reg2 <- buyback_annualcost_2+reg2_temphousingoo+household_goods_reimbursed*reg2_affectedhh_perevent*(1-reg2_renters)*reg2_meanevents*sum(housevalue_reg2*housevalue_dist2)*region2_growthfactor
+
+region2_popdec_invoo <- as.matrix(rep(((buyback_takeup*reg2_affectedhh_perevent*(1-reg2_renters)*reg2_meanevents)/national_total_households[2]), 100))*region2_growthfactor
+
+region2_growthfactor2 <- region2_growthfactor - colCumsums(region2_popdec_invoo, dim = dim(region2_popdec_invoo))
+
+
+# Region 2 displaced renters cost
+
+reg2_temphousingrent <- reg2_affectedhh_perevent*reg2_renters*reg2_meanevents*temporary_housing_reg2*temporary_housing_months*region2_growthfactor
+reg2_rent_relocators <- reg2_affectedhh_perevent*reg2_renters*reg2_meanevents*buyback_takeup*region2_growthfactor
+
+involuntarycost_reg2 <- involuntarycost_reg2+reg2_temphousingrent+household_goods_reimbursed*reg2_affectedhh_perevent*reg2_renters*reg2_meanevents*sum(housevalue_reg2*housevalue_dist2)*region2_growthfactor
+
+region2_popdec_invrent <- as.matrix(rep(((buyback_takeup*reg2_affectedhh_perevent*reg2_renters*reg2_meanevents)/national_total_households[2]), 100))*region2_growthfactor
+
+region2_growthfactor3 <- region2_growthfactor2 - colCumsums(region2_popdec_invrent, dim = dim(region2_popdec_invrent))
+
+
+
+
+### Involuntary relocation - paid-out rent 
+
+n_involuntary_rental <- reg2_rent_relocators + reg4_rent_relocators + reg5_rent_relocators + reg6_rent_relocators
+
+n_involuntary_rental_reg1 <- n_involuntary_rental*prop_renters_reg1
+n_involuntary_rental_reg3 <- n_involuntary_rental*prop_renters_reg3
+
+cost_involuntary_rental_reg1 <- n_involuntary_rental_reg1*extract_numeric(eco_dem_data[10,2])*2
+cost_involuntary_rental_reg3 <- n_involuntary_rental_reg3*extract_numeric(eco_dem_data[10,4])*2
+
+
+
+### Destinations of involuntary relocators 
+
+total_involuntary_relocation <- region6_popdec_invoo*national_total_households[6]+region6_popdec_invrent*national_total_households[6]+region5_popdec_invoo*national_total_households[5]+region5_popdec_invrent*national_total_households[5]+region4_popdec_invoo*national_total_households[4]+region4_popdec_invrent*national_total_households[4]+region2_popdec_invoo*national_total_households[2]+region2_popdec_invrent*national_total_households[2]
+
+reg1_arrivals_inv <- as.matrix(round(total_involuntary_relocation*proportion_reg1))
+reg3_arrivals_inv <- as.matrix(round(total_involuntary_relocation*proportion_reg3))
+
+reg1_invol_cumarr <- colCumsums(reg1_arrivals_inv, dim = dim(reg1_arrivals_inv))
+reg3_invol_cumarr <- colCumsums(reg3_arrivals_inv, dim = dim(reg3_arrivals_inv))
+
+region1_hholds_inv_prop <- reg1_invol_cumarr/national_total_households[1] 
+region3_hholds_inv_prop <- reg3_invol_cumarr/national_total_households[3] 
+
+
+# CLAIMS COST WITH NEW RISK PROFILES ====
+
+## Population Growth factor of low-risk regions (1 and 3)
+
+region1_growthfactor_total <- region1_growthfactor + region1_hholds_inv_prop
+region3_growthfactor_total <- region3_growthfactor + region3_hholds_inv_prop
+
+## Estimated damange in each region with new populations
+
+region1_meandamange_scheme <- (house.damage.est$Mean_Damage_Est*4+house.damage.est$Mean_Disp_cost)[1]*region1_growthfactor_total
+region2_meandamange_scheme <- (house.damage.est$Mean_Damage_Est*4+house.damage.est$Mean_Disp_cost)[2]*region2_growthfactor3
+region3_meandamange_scheme <- (house.damage.est$Mean_Damage_Est*4+house.damage.est$Mean_Disp_cost)[3]*region3_growthfactor_total
+region4_meandamange_scheme <- (house.damage.est$Mean_Damage_Est*4+house.damage.est$Mean_Disp_cost)[4]*region4_growthfactor3
+region5_meandamange_scheme <- (house.damage.est$Mean_Damage_Est*4+house.damage.est$Mean_Disp_cost)[5]*region5_growthfactor3
+region6_meandamange_scheme <- (house.damage.est$Mean_Damage_Est*4+house.damage.est$Mean_Disp_cost)[6]*region6_growthfactor3
+
+
+## Total cost of the scheme versus without the scheme
+
+meandamage_scheme <- region1_meandamange_scheme+region2_meandamange_scheme+region3_meandamange_scheme+region4_meandamange_scheme+region5_meandamange_scheme+region6_meandamange_scheme
+meandamage_noscheme <- mean.economic.cost
+
+scheme_savings <- meandamage_noscheme-meandamage_scheme 
+
+(house.damage.est$Upper_Damage_Est)[2]/as.numeric(eco_dem_data[6,3])
+
+
+## Upper-estimate for damange
+
+region1_upperdamange_scheme <- (house.damage.est$Upper_Damage_Est*4+house.damage.est$Upper_Disp_cost)[1]*region1_growthfactor_total
+region2_upperdamange_scheme <- (house.damage.est$Upper_Damage_Est*4+house.damage.est$Upper_Disp_cost)[2]*region2_growthfactor3
+region3_upperdamange_scheme <- (house.damage.est$Upper_Damage_Est*4+house.damage.est$Upper_Disp_cost)[3]*region3_growthfactor_total
+region4_upperdamange_scheme <- (house.damage.est$Upper_Damage_Est*4+house.damage.est$Upper_Disp_cost)[4]*region4_growthfactor3
+region5_upperdamange_scheme <- (house.damage.est$Upper_Damage_Est*4+house.damage.est$Upper_Disp_cost)[5]*region5_growthfactor3
+region6_upperdamange_scheme <- (house.damage.est$Upper_Damage_Est*4+house.damage.est$Upper_Disp_cost)[6]*region6_growthfactor3
+
+upperdamage_scheme <- region1_upperdamange_scheme+region2_upperdamange_scheme+region3_upperdamange_scheme+region4_upperdamange_scheme+region5_upperdamange_scheme+region6_upperdamange_scheme
+upperdamage_noscheme <- upper.economic.cost
+
+upper_scheme_savings <- upperdamage_noscheme-upperdamage_scheme 
+
+
+# ASSESSMENT METRICS OF SCHEME ====
+
+## Economic cost per capital by region after 100 years 
+
+region2_upperdamange_scheme[100]/as.numeric(eco_dem_data[6,3])
+region4_upperdamange_scheme[100]/as.numeric(eco_dem_data[6,5])
+region5_upperdamange_scheme[100]/as.numeric(eco_dem_data[6,6])
+region6_upperdamange_scheme[100]/as.numeric(eco_dem_data[6,7])
+
+region1_upperdamange_scheme[100]/as.numeric(eco_dem_data[6,2])
+region3_upperdamange_scheme[100]/as.numeric(eco_dem_data[6,4])
+
+## Number of high-risk and low-risk households before scheme 
+
+reg1and3hh <- as.numeric(eco_dem_data[6,2])+as.numeric(eco_dem_data[6,4])
+highriskhh <- as.numeric(eco_dem_data[6,3])+sum(as.numeric(eco_dem_data[6,5:7]))
+
+## Mean/upper damange in high and low risk regions with the scheme
+
+high_perhousehold_claims_affected <- (region2_upperdamange_scheme+region4_upperdamange_scheme+region5_upperdamange_scheme+region6_upperdamange_scheme)/highriskhh/mean(region2_growthfactor3[1], region4_growthfactor3[1], region5_growthfactor3[1], region6_growthfactor3[1])
+high_perhousehold_claims_safer <- (region1_upperdamange_scheme+region3_upperdamange_scheme)/reg1and3hh/mean(region1_growthfactor[1], region3_growthfactor[1])
+
+perhousehold_claims_affected <- (region2_meandamange_scheme+region4_meandamange_scheme+region5_meandamange_scheme+region6_meandamange_scheme)/highriskhh/mean(region2_growthfactor3[1], region4_growthfactor3[1], region5_growthfactor3[1], region6_growthfactor3[1])
+perhousehold_claims_safer <- (region1_meandamange_scheme+region3_meandamange_scheme)/reg1and3hh/mean(region1_growthfactor_total[1], region3_growthfactor_total[1])
+
+## Present value of scheme savings
+
+(perhousehold_claims_affected-perhousehold_claims_safer)[1]/.07
+
+((high_perhousehold_claims_affected-high_perhousehold_claims_safer)[1])/.04
+
+
+
+## Computing the difference in costs between having the scheme and not having the scheme
+
+### Additional costs per scheme are voluntary relocations; savings for scheme and reductions in claim values
+
+gov_voluntary_costs <- total_voluntary_costs
+gov_involuntary_costs <- cost_involuntary_rental_reg1+cost_involuntary_rental_reg3+involuntarycost_reg2+involuntarycost_reg4+involuntarycost_reg5+involuntarycost_reg6
+scheme_additional_costs <- cost_involuntary_rental_reg1+cost_involuntary_rental_reg3+buyback_annualcost_2+buyback_annualcost_4+buyback_annualcost_5+buyback_annualcost_6+gov_voluntary_costs
+
+true_scheme_savings <- as.data.frame(as.numeric(scheme_savings-scheme_additional_costs))
+
+colnames(true_scheme_savings) <- c("True Scheme Savings")
+
+### Plotting scheme savings
+
+true_scheme_savings <- true_scheme_savings %>% 
+  mutate(Year = seq(2020,2119, 1))
+
+ggplot(data=true_scheme_savings, aes(x=Year, y=`True Scheme Savings`, group=1)) +
+  geom_line()
+
+schemecost_mean <- as.data.frame(scheme_additional_costs+meandamage_scheme)
+schemecost_mean <- cbind(seq(2025, 2124, 1), schemecost_mean)
+colnames(schemecost_mean) <- c("Year", "Mean Scheme Costs")
+
+ggplot(data=schemecost_mean, aes(x=Year, y=`Mean Scheme Costs`, group=1)) +
+  geom_line()
+
+
+### Computing the difference in costs between having the scheme and not having the scheme with upper-value of claims 
+
+gov_voluntary_costs <- total_voluntary_costs
+gov_involuntary_costs <- cost_involuntary_rental_reg1+cost_involuntary_rental_reg3+involuntarycost_reg2+involuntarycost_reg4+involuntarycost_reg5+involuntarycost_reg6
+scheme_additional_costs <- cost_involuntary_rental_reg1+cost_involuntary_rental_reg3+buyback_annualcost_2+buyback_annualcost_4+buyback_annualcost_5+buyback_annualcost_6+gov_voluntary_costs
+
+true_scheme_savings_upper <- upper_scheme_savings-scheme_additional_costs
+
+schemecost_upper <- scheme_additional_costs+upperdamage_scheme
+
+# REPORT PRICING AND COSTS SECTION ====
+
+growth_factors <- list(region1_growthfactor_total, region2_growthfactor3, region3_growthfactor_total, 
+                       region4_growthfactor3, region5_growthfactor3, region6_growthfactor3)
+
+## Short term projections
+
+short_term_mean <- list()
+region_mean_damage <- rep(0,6)
+for(i in 1:10){
+  for(j in 1:6){
+    region_mean_damage[j] <- house.damage.est$Mean_Damage_Est[j]*4*growth_factors[[j]][i,1]
+  }
+  short_term_mean[[i]] <- sum(region_mean_damage)
+}
+unlist(short_term_mean)
+mean(unlist(short_term_mean))
+
+short_mean_disp <- list()
+region_disp_cost <- rep(0,6)
+for(i in 1:10){
+  for(j in 1:6){
+    region_disp_cost[j] <- house.damage.est$Mean_Disp_cost[j]*growth_factors[[j]][i,1]
+  }
+  short_mean_disp[[i]] <- sum(region_disp_cost)
+}
+unlist(short_mean_disp)
+mean(unlist(short_mean_disp))
+
+short_term_upper <- list()
+region_upper_damage <- rep(0,6)
+for(i in 1:10){
+  for(j in 1:6){
+    region_upper_damage[j] <- house.damage.est$Upper_Damage_Est[j]*4*growth_factors[[j]][i,1]
+  }
+  short_term_upper[[i]] <- sum(region_upper_damage)
+}
+unlist(short_term_upper)
+mean(unlist(short_term_upper))
+
+short_upper_disp <- list()
+region_disp_cost <- rep(0,6)
+for(i in 1:10){
+  for(j in 1:6){
+    region_disp_cost[j] <- house.damage.est$Upper_Disp_cost[j]*growth_factors[[j]][i,1]
+  }
+  short_upper_disp[[i]] <- sum(region_disp_cost)
+}
+unlist(short_upper_disp)
+mean(unlist(short_upper_disp))
+
+short_mean_cost <- mean(unlist(short_term_mean)) + mean(unlist(short_mean_disp)) + 
+  mean(gov_voluntary_costs[1:10,1]) + mean(scheme_additional_costs[1:10,1])
+short_mean_cost
+
+short_upper_cost <- mean(unlist(short_term_upper)) + mean(unlist(short_upper_disp)) + 
+  mean(gov_voluntary_costs[1:10,1]) + mean(scheme_additional_costs[1:10,1])
+short_upper_cost
+
+## Long term projections
+
+long_term_mean <- list()
+region_mean_damage <- rep(0,6)
+for(i in 51:60){
+  for(j in 1:6){
+    region_mean_damage[j] <- house.damage.est$Mean_Damage_Est[j]*4*growth_factors[[j]][i,1]
+  }
+  long_term_mean[[i]] <- sum(region_mean_damage)
+}
+unlist(long_term_mean)
+mean(unlist(long_term_mean))
+
+long_mean_disp <- list()
+region_disp_cost <- rep(0,6)
+for(i in 51:60){
+  for(j in 1:6){
+    region_disp_cost[j] <- house.damage.est$Mean_Disp_cost[j]*growth_factors[[j]][i,1]
+  }
+  long_mean_disp[[i]] <- sum(region_disp_cost)
+}
+unlist(long_mean_disp)
+mean(unlist(long_mean_disp))
+
+long_term_upper <- list()
+region_upper_damage <- rep(0,6)
+for(i in 51:60){
+  for(j in 1:6){
+    region_upper_damage[j] <- house.damage.est$Upper_Damage_Est[j]*4*growth_factors[[j]][i,1]
+  }
+  long_term_upper[[i]] <- sum(region_upper_damage)
+}
+unlist(long_term_upper)
+mean(unlist(long_term_upper))
+
+long_upper_disp <- list()
+region_disp_cost <- rep(0,6)
+for(i in 51:60){
+  for(j in 1:6){
+    region_disp_cost[j] <- house.damage.est$Upper_Disp_cost[j]*growth_factors[[j]][i,1]
+  }
+  long_upper_disp[[i]] <- sum(region_disp_cost)
+}
+unlist(long_upper_disp)
+mean(unlist(long_upper_disp))
+
+long_mean_cost <- mean(unlist(long_term_mean)) + mean(unlist(long_mean_disp)) + 
+  mean(gov_voluntary_costs[51:60,1]) + mean(scheme_additional_costs[51:60,1])
+long_mean_cost
+
+long_upper_cost <- mean(unlist(long_term_upper)) + mean(unlist(long_upper_disp)) + 
+  mean(gov_voluntary_costs[51:60,1]) + mean(scheme_additional_costs[51:60,1])
+long_upper_cost
+
+## Capital requirements
+
+upper_capital_required <- rep(0,10)
+l <- seq(1, 91, 10)
+u <- seq(10, 100, 10)
+for(k in 1:10){
+  short_term_upper <- list()
+  region_upper_damage <- rep(0,6)
+  for(i in l[k]:u[k]){
+    for(j in 1:6){
+      region_upper_damage[j] <- house.damage.est$Upper_Damage_Est[j]*4*growth_factors[[j]][i,1]
+    }
+    short_term_upper[[i]] <- sum(region_upper_damage)
+  }
+  unlist(short_term_upper)
+  mean(unlist(short_term_upper))
+  
+  short_upper_disp <- list()
+  region_disp_cost <- rep(0,6)
+  for(i in l[k]:u[k]){
+    for(j in 1:6){
+      region_disp_cost[j] <- house.damage.est$Upper_Disp_cost[j]*growth_factors[[j]][i,1]
+    }
+    short_upper_disp[[i]] <- sum(region_disp_cost)
+  }
+  unlist(short_upper_disp)
+  mean(unlist(short_upper_disp))
+  
+  upper_capital_required[k] <- mean(unlist(short_term_upper)) + mean(unlist(short_upper_disp)) + 
+    mean(gov_voluntary_costs[l[k]:u[k],1]) + mean(scheme_additional_costs[l[k]:u[k],1])
+}
+upper_capital_required
+
+graph_capital <- data.frame("Year" = seq(2020, 2110, 10),
+                            "Capital" = upper_capital_required)
+
+ggplot(data = graph_capital) +
+  geom_line(aes(x = Year, y = Capital/1000000, group = 1)) + 
+  labs(x = "Year", y = "Capital Required (Ꝕ million)")
+
+# SENSITIVITY ANALYSIS WITH SCHEME AND CLIMATE SCENARIOS ====
+
+## Sensitivity analysis with climate scenarios and their impact on the scheme
+
+### Lowest risk scenario (SSP1)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_low <- data.frame(x=c(risk_amp_factor$Year), 
+                                     y=c(risk_amp_factor$`RAF-SSP1-2.6`))
+
+model_df_risk_amp_factor_low <- lm(y ~ x, data = df_risk_amp_factor_low)
+
+y_df_risk_amp_factor_low = approx(df_risk_amp_factor_low$x, df_risk_amp_factor_low$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_low <- rep(0, 8)
+GDP_growth_low_emissions <- SSP_scenarios_data$`GDPPC-SSP1-2.6`
+
+for(i in 4:11){
+  GDP_growthfactor_low[i-3] = (GDP_growth_low_emissions[i]/GDP_growth_low_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_low <- c(rep(GDP_growthfactor_low[1], 10), rep(GDP_growthfactor_low[2], 10), rep(GDP_growthfactor_low[3], 10), rep(GDP_growthfactor_low[4], 10), rep(GDP_growthfactor_low[5], 10), rep(GDP_growthfactor_low[6], 10), rep(GDP_growthfactor_low[7], 10), rep(GDP_growthfactor_low[8], 10))
+GDP_annual_growth_low <- cumprod(GDP_annual_growth_low)
+
+GDP_forecast_low <- GDP_annual_growth_low*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+low_schemecosts <- meandamage_scheme[1:76]*(y_df_risk_amp_factor_low$y[5:80])+scheme_additional_costs[1:76]
+
+low_schemecosts_percentage <- (low_schemecosts[1:76])/GDP_forecast_low[5:80]
+
+
+
+
+### Medium risk scenario (SSP2)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_med <- data.frame(x=c(risk_amp_factor$Year), 
+                                     y=c(risk_amp_factor$`RAF-SSP2-3.4`))
+
+model_df_risk_amp_factor_med <- lm(y ~ x, data = df_risk_amp_factor_med)
+
+y_df_risk_amp_factor_med = approx(df_risk_amp_factor_med$x, df_risk_amp_factor_med$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_med <- rep(0, 8)
+GDP_growth_med_emissions <- SSP_scenarios_data$`GDPPC-SSP2-3.4`
+
+for(i in 4:11){
+  GDP_growthfactor_med[i-3] = (GDP_growth_med_emissions[i]/GDP_growth_med_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_med <- c(rep(GDP_growthfactor_med[1], 10), rep(GDP_growthfactor_med[2], 10), rep(GDP_growthfactor_med[3], 10), rep(GDP_growthfactor_med[4], 10), rep(GDP_growthfactor_med[5], 10), rep(GDP_growthfactor_med[6], 10), rep(GDP_growthfactor_med[7], 10), rep(GDP_growthfactor_med[8], 10))
+GDP_annual_growth_med <- cumprod(GDP_annual_growth_med)
+
+GDP_forecast_med <- GDP_annual_growth_med*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+med_schemecosts <- meandamage_scheme[1:76]*(y_df_risk_amp_factor_med$y[5:80])+scheme_additional_costs[1:76]
+
+med_schemecosts_percentage <- (med_schemecosts[1:76])/GDP_forecast_med[5:80]
+
+
+#### Cost savings by 2100
+
+(sensitivity$Mean_SSP2)[8]-med_schemecosts[66]
+
+
+
+
+### High risk scenario (SSP3)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_high <- data.frame(x=c(risk_amp_factor$Year), 
+                                      y=c(risk_amp_factor$`RAF-SSP3-6.0`))
+
+model_df_risk_amp_factor_high <- lm(y ~ x, data = df_risk_amp_factor_high)
+
+y_df_risk_amp_factor_high = approx(df_risk_amp_factor_high$x, df_risk_amp_factor_high$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_high <- rep(0, 8)
+GDP_growth_high_emissions <- SSP_scenarios_data$`GDPPC-SSP3-6.0`
+
+for(i in 4:11){
+  GDP_growthfactor_high[i-3] = (GDP_growth_high_emissions[i]/GDP_growth_high_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_high <- c(rep(GDP_growthfactor_high[1], 10), rep(GDP_growthfactor_high[2], 10), rep(GDP_growthfactor_high[3], 10), rep(GDP_growthfactor_high[4], 10), rep(GDP_growthfactor_high[5], 10), rep(GDP_growthfactor_high[6], 10), rep(GDP_growthfactor_high[7], 10), rep(GDP_growthfactor_high[8], 10))
+GDP_annual_growth_high <- cumprod(GDP_annual_growth_high)
+
+GDP_forecast_high <- GDP_annual_growth_high*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+high_schemecosts <- meandamage_scheme[1:76]*(y_df_risk_amp_factor_high$y[5:80])+scheme_additional_costs[1:76]
+
+high_schemecosts_percentage <- (high_schemecosts[1:76])/GDP_forecast_high[5:80]
+
+
+
+### Worst climate risk scenario (SSP5)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_worst <- data.frame(x=c(risk_amp_factor$Year), 
+                                       y=c(risk_amp_factor$`RAF-SSP5-Baseline`))
+
+model_df_risk_amp_factor_worst <- lm(y ~ x, data = df_risk_amp_factor_worst)
+
+y_df_risk_amp_factor_worst = approx(df_risk_amp_factor_worst$x, df_risk_amp_factor_worst$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_worst <- rep(0, 8)
+GDP_growth_worst_emissions <- SSP_scenarios_data$`GDPPC-SSP5-Baseline`
+
+for(i in 4:11){
+  GDP_growthfactor_worst[i-3] = (GDP_growth_worst_emissions[i]/GDP_growth_worst_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_worst <- c(rep(GDP_growthfactor_worst[1], 10), rep(GDP_growthfactor_worst[2], 10), rep(GDP_growthfactor_worst[3], 10), rep(GDP_growthfactor_worst[4], 10), rep(GDP_growthfactor_worst[5], 10), rep(GDP_growthfactor_worst[6], 10), rep(GDP_growthfactor_worst[7], 10), rep(GDP_growthfactor_worst[8], 10))
+GDP_annual_growth_worst <- cumprod(GDP_annual_growth_worst)
+
+GDP_forecast_worst <- GDP_annual_growth_worst*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+worst_schemecosts <- meandamage_scheme[1:76]*(y_df_risk_amp_factor_worst$y[5:80])+scheme_additional_costs[1:76]
+
+worst_schemecosts_percentage <- (worst_schemecosts[1:76])/GDP_forecast_worst[5:80]
+
+
+### Low risk scenario with high claims (SSP1 and 95% percentile claims)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_low <- data.frame(x=c(risk_amp_factor$Year), 
+                                     y=c(risk_amp_factor$`RAF-SSP1-2.6`))
+
+model_df_risk_amp_factor_low <- lm(y ~ x, data = df_risk_amp_factor_low)
+
+y_df_risk_amp_factor_low = approx(df_risk_amp_factor_low$x, df_risk_amp_factor_low$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_low <- rep(0, 8)
+GDP_growth_low_emissions <- SSP_scenarios_data$`GDPPC-SSP1-2.6`
+
+for(i in 4:11){
+  GDP_growthfactor_low[i-3] = (GDP_growth_low_emissions[i]/GDP_growth_low_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_low <- c(rep(GDP_growthfactor_low[1], 10), rep(GDP_growthfactor_low[2], 10), rep(GDP_growthfactor_low[3], 10), rep(GDP_growthfactor_low[4], 10), rep(GDP_growthfactor_low[5], 10), rep(GDP_growthfactor_low[6], 10), rep(GDP_growthfactor_low[7], 10), rep(GDP_growthfactor_low[8], 10))
+GDP_annual_growth_low <- cumprod(GDP_annual_growth_low)
+
+GDP_forecast_low <- GDP_annual_growth_low*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+low_schemecosts_highclaims <- upperdamage_scheme[1:76]*(y_df_risk_amp_factor_low$y[5:80])+scheme_additional_costs[1:76]
+
+low_schemecosts_highclaims_percentage <- (low_schemecosts_highclaims[1:76])/GDP_forecast_low[5:80]
+
+
+
+
+### Medium risk scenario with high claims (SSP2 and 95% percentile claims)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_med <- data.frame(x=c(risk_amp_factor$Year), 
+                                     y=c(risk_amp_factor$`RAF-SSP2-3.4`))
+
+model_df_risk_amp_factor_med <- lm(y ~ x, data = df_risk_amp_factor_med)
+
+y_df_risk_amp_factor_med = approx(df_risk_amp_factor_med$x, df_risk_amp_factor_med$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_med <- rep(0, 8)
+GDP_growth_med_emissions <- SSP_scenarios_data$`GDPPC-SSP2-3.4`
+
+for(i in 4:11){
+  GDP_growthfactor_med[i-3] = (GDP_growth_med_emissions[i]/GDP_growth_med_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_med <- c(rep(GDP_growthfactor_med[1], 10), rep(GDP_growthfactor_med[2], 10), rep(GDP_growthfactor_med[3], 10), rep(GDP_growthfactor_med[4], 10), rep(GDP_growthfactor_med[5], 10), rep(GDP_growthfactor_med[6], 10), rep(GDP_growthfactor_med[7], 10), rep(GDP_growthfactor_med[8], 10))
+GDP_annual_growth_med <- cumprod(GDP_annual_growth_med)
+
+GDP_forecast_med <- GDP_annual_growth_med*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+med_schemecosts_highclaims <- upperdamage_scheme[1:76]*(y_df_risk_amp_factor_med$y[5:80])+scheme_additional_costs[1:76]
+
+med_schemecosts_highclaims_percentage <- (med_schemecosts_highclaims[1:76])/GDP_forecast_med[5:80]
+
+
+
+
+### High risk scenario with high claims (SSP3 and 95% percentile claims)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_high <- data.frame(x=c(risk_amp_factor$Year), 
+                                      y=c(risk_amp_factor$`RAF-SSP3-6.0`))
+
+model_df_risk_amp_factor_high <- lm(y ~ x, data = df_risk_amp_factor_high)
+
+y_df_risk_amp_factor_high = approx(df_risk_amp_factor_high$x, df_risk_amp_factor_high$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_high <- rep(0, 8)
+GDP_growth_high_emissions <- SSP_scenarios_data$`GDPPC-SSP3-6.0`
+
+for(i in 4:11){
+  GDP_growthfactor_high[i-3] = (GDP_growth_high_emissions[i]/GDP_growth_high_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_high <- c(rep(GDP_growthfactor_high[1], 10), rep(GDP_growthfactor_high[2], 10), rep(GDP_growthfactor_high[3], 10), rep(GDP_growthfactor_high[4], 10), rep(GDP_growthfactor_high[5], 10), rep(GDP_growthfactor_high[6], 10), rep(GDP_growthfactor_high[7], 10), rep(GDP_growthfactor_high[8], 10))
+GDP_annual_growth_high <- cumprod(GDP_annual_growth_high)
+
+GDP_forecast_high <- GDP_annual_growth_high*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+high_schemecosts_highclaims <- upperdamage_scheme[1:76]*(y_df_risk_amp_factor_high$y[5:80])+scheme_additional_costs[1:76]
+
+high_schemecosts_highclaims_percentage <- (high_schemecosts_highclaims[1:76])/GDP_forecast_high[5:80]
+
+#### Savings by 2030
+(sensitivity$Upper_SSP3)[2]-high_schemecosts_highclaims[6]
+
+
+### Worst risk scenario with high claims (SSP5 and 95% percentile claims)
+
+risk_amp_factor <- emissions_data[1:9, c(1, 14:17)]
+
+df_risk_amp_factor_worst <- data.frame(x=c(risk_amp_factor$Year), 
+                                       y=c(risk_amp_factor$`RAF-SSP5-Baseline`))
+
+model_df_risk_amp_factor_worst <- lm(y ~ x, data = df_risk_amp_factor_worst)
+
+y_df_risk_amp_factor_worst = approx(df_risk_amp_factor_worst$x, df_risk_amp_factor_worst$y, xout=c(2020:2100))
+
+
+GDP_growthfactor_worst <- rep(0, 8)
+GDP_growth_worst_emissions <- SSP_scenarios_data$`GDPPC-SSP5-Baseline`
+
+for(i in 4:11){
+  GDP_growthfactor_worst[i-3] = (GDP_growth_worst_emissions[i]/GDP_growth_worst_emissions[i-1])^(1/10)
+}
+
+GDP_annual_growth_worst <- c(rep(GDP_growthfactor_worst[1], 10), rep(GDP_growthfactor_worst[2], 10), rep(GDP_growthfactor_worst[3], 10), rep(GDP_growthfactor_worst[4], 10), rep(GDP_growthfactor_worst[5], 10), rep(GDP_growthfactor_worst[6], 10), rep(GDP_growthfactor_worst[7], 10), rep(GDP_growthfactor_worst[8], 10))
+GDP_annual_growth_worst <- cumprod(GDP_annual_growth_worst)
+
+GDP_forecast_worst <- GDP_annual_growth_worst*sum(as.numeric(eco_dem_data[28, 2:7]))*1000
+
+worst_schemecosts_highclaims <- upperdamage_scheme[1:76]*(y_df_risk_amp_factor_worst$y[5:80])+scheme_additional_costs[1:76]
+
+worst_schemecosts_highclaims_percentage <- (worst_schemecosts_highclaims[1:76])/GDP_forecast_worst[5:80]
+
+
+### Sensitivity plot 
+
+sensitivity_scheme <- as.data.frame(c(seq(2025, 2100, 1))) %>%
+  mutate("Mean_SSP1" = low_schemecosts,
+         "Mean_SSP2" = med_schemecosts,
+         "Mean_SSP3" = high_schemecosts,
+         "Mean_SSP5" = worst_schemecosts,
+         "Upper_SSP1" = low_schemecosts_highclaims,
+         "Upper_SSP2" = med_schemecosts_highclaims,
+         "Upper_SSP3" = high_schemecosts_highclaims,
+         "Upper_SSP5" = worst_schemecosts_highclaims)
+
+GDP_growth_annual <- cbind("Year" = c(seq(2021, 2100, 1)), GDP_forecast_low, GDP_forecast_med, GDP_forecast_high, GDP_forecast_worst)
+colnames(GDP_growth_annual) <- c("Year", "GDP_SSP1", "GDP_SSP2", "GDP_SSP3", "GDP_SSP5")
+
+sensitivity_scheme <- cbind("Year" = GDP_growth_annual[5:80,1], sensitivity_scheme[-1], GDP_growth_annual[5:80,2:5])
+
+
+# in $'000,000 
+sensitivity_mil_scheme <- sensitivity_scheme
+sensitivity_mil_scheme[,2:13] <- sensitivity_scheme[,2:13]/1000000
+sensitivity_mil_scheme
+
+
+colours <- c("SSP1" = "green", "SSP2" = "yellow", "SSP3" = "orange", "SSP5" = "red")
+ggplot(data = sensitivity_mil_scheme) +
+  geom_smooth(aes(x = Year, y = log(Mean_SSP1), ymax = log(Upper_SSP1), ymin = log(Mean_SSP1), group = 1, colour = "SSP1"), stat = "identity") + 
+  geom_smooth(aes(x = Year, y = log(Mean_SSP2), ymax = log(Upper_SSP2), ymin = log(Mean_SSP2), group = 1, colour = "SSP2"), stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(Mean_SSP3), ymax = log(Upper_SSP3), ymin = log(Mean_SSP3), group = 1, colour = "SSP3"), stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(Mean_SSP5), ymax = log(Upper_SSP5), ymin = log(Mean_SSP5), group = 1, colour = "SSP5"), stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP1*0.1), group = 1, colour = "SSP1"), linetype = "dashed", stat = "identity") + 
+  geom_smooth(aes(x = Year, y = log(GDP_SSP2*0.1), group = 1, colour = "SSP2"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP3*0.1), group = 1, colour = "SSP3"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP5*0.1), group = 1, colour = "SSP5"), linetype = "dashed", stat = "identity") +
+  labs(x = "Year", y = "Log Economic Cost (Ꝕ million)", colour = "Legend") +
+  scale_colour_manual(values = colours)
+
+# solid line represents the mean economic cost
+# dashed line represents 10% GDP
+# Y-axis is log-scale because it's too hard to see the divergence otherwise
+
+# GDP graph on its own
+ggplot(data = sensitivity_mil_scheme) +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP1*0.1), group = 1, colour = "SSP1"), linetype = "dashed", stat = "identity") + 
+  geom_smooth(aes(x = Year, y = log(GDP_SSP2*0.1), group = 1, colour = "SSP2"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP3*0.1), group = 1, colour = "SSP3"), linetype = "dashed", stat = "identity") +
+  geom_smooth(aes(x = Year, y = log(GDP_SSP5*0.1), group = 1, colour = "SSP5"), linetype = "dashed", stat = "identity") +
+  labs(x = "Year", y = "Log Economic Cost (Ꝕ million)", colour = "Legend") +
+  scale_colour_manual(values = colours)
+
+
+### Damage per region per capital with the model developped 
+freq_sev_est$Mean_Damage_Est/as.numeric(eco_dem_data[1, 2:7])
+
+### Number of buybacks per region
+
+no.buybacks <- buyback_annualcost_2/sum(housevalue_reg2*housevalue_dist2) + buyback_annualcost_4/sum(housevalue_reg4*housevalue_dist4) + buyback_annualcost_5/sum(housevalue_reg5*housevalue_dist5) + buyback_annualcost_6/sum(housevalue_reg6*housevalue_dist6)
+
+buyback_annualcost_2/no.buybacks + buyback_annualcost_4/no.buybacks + buyback_annualcost_5/no.buybacks + buyback_annualcost_6/no.buybacks
+
+
+### Some Assumptions
+
+# assume closed system and no population growth
+# assume real GDP growth cancels out effect of inflation, meaning we don't have to consider cost of inflation with respect to scheme costs - conservative because GDP will probably grow
+# buy back house; move to lower risk region; 
+# cap voluntary relocations  at 4% relocations per year 
+
+
+
+
+
+
+# END OF CODE ====
