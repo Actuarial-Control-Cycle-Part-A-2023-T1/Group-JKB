@@ -1,7 +1,7 @@
 # 2023 Student Research Case Study Challenge: Relocation Social Insurance 
 ## UNSW x SOA sponsored by Valani Global
 ![alt text](LOGOS.svg "UNSW, SOA & Valani Global logos")
->
+
 ## Group JKB Consulting Report
 
 The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the buttons or links below.
@@ -11,31 +11,29 @@ The purpose of this page is to outline the key insights and analysis of the prop
 [![FINAL COMBINED CODE](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/FINAL%20COMBINED%20CODE%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
 
 
-[2023 SOA Case Study](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)     
-[Consulting Report](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)      
+[2023 SOA Case Study](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)   |
+[Consulting Report](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)   |
 [Final Combined Code](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
 
 ---
 
 ### Page Navigation
+[Executive Summary](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#executive-summary)
 >
->[Executive Summary](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#executive-summary)
+[Objectives](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#objectives)
+[Program Design](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#program-design)
 >
->[Objectives](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#objectives)
+[Pricing and Costs](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#pricing-and-costs)
 >
->[Program Design](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#program-design)
+[Assumptions](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#assumptions)
 >
->[Pricing and Costs](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#pricing-and-costs)
+[Risk and Risk Mitigation Strategies](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#risk-and-risk-mitigation-strategies)
 >
->[Assumptions](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#assumptions)
+[Data and Data Limitations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#data-and-data-limitations)
 >
->[Risk and Risk Mitigation Strategies](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#risk-and-risk-mitigation-strategies)
+[Conclusion/Recommendations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#conclusionrecommendations)
 >
->[Data and Data Limitations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#data-and-data-limitations)
->
->[Conclusion/Recommendations](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#conclusionrecommendations)
->
->[References](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#references)
+[References](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#references)
 
 ---
 
@@ -48,7 +46,7 @@ This report was composed to design and evaluate a social insurance program to as
 The goal of this social insurance program is to manage the financial risks associated with catastrophe-related displacement in Storslysia. To this end, the program aims to encourage proactive relocation which lowers damage risk and comes at a lower cost than involuntary displacement. This scheme will cover the entire population of Storslysia. As well as reducing long-term costs from climate-related disasters regardless of future emissions scenarios, this scheme will provide financial support to Storslysia citizens affected by such disasters. This program will be equitable in its design such that very affluent households are not advantaged by the scheme any more than lower or middle-class households. Keeping the costs arising from relocation from exceeding 10% of GDP each year with a high degree of certainty is the aim of this program. 
 
 The following key metrics will be used to monitor the social insurance program:
->
+
 | Metric                                               | Frequency                                             |
 | ---------------------------------------------------- | ---------------------------------------------------- |
 | Compare costs with and without the scheme            | Annually for the first 10 years, then every 3 years |
@@ -71,7 +69,7 @@ Support for all households with uninhabitable homes affected by the natural disa
 * Up to 30% of housing costs will be paid out to replace household goods.
 * Up to 30% of the median value of houses in that region.
 * Temporary housing in the affected region is provided for 12 months.
->
+  
 In addition, the following benefits are included as a part of the program to assist with relocation:
 
 |                                  | Voluntary relocation                                                            | Involuntary relocation                                                                              | 
@@ -82,10 +80,14 @@ In addition, the following benefits are included as a part of the program to ass
 (Karen: didn't include the wordy reasoning sections, they can see the report for that)
 
 ## Pricing and Costs
-(Karen: still thinking about the best way to present this section in a concise but engaging manner)
+
+### Methodology
+To accurately project the economic costs of the climate-related catastrophes for Storslysia, data was gathered from Storslysia’s quarterly historical record of climate-related catastrophes ranging from 1960 to 2020, as well as economic and demographic data on each of the 6 regions. Exploratory data analysis was performed to understand the economic and demographic nature of each region and their climate risks. A training set of data was selected for the period 1960 to 2015, leaving the last 5 years as a validation set to assess performance via various metrics. Taking a frequency-severity approach to pricing claims cost, forecasts were projected for each region using simulations from each distribution, before aggregating to a final estimate with 95% confidence intervals.
+
 ### Short-term projections
 
 #### Economic costs
+Without the proposed insurance program, the cost of total property damage is estimated to be close to φ 255 million per annum. Along with property damage, climate-related catastrophes also come with additional costs, including temporary housing for involuntary relocation, material and labour for rebuilding damaged properties, and replacing household items. These costs have been summarised in the table below as displacement costs. The short-term projection (2020-2030) for total economic cost is φ 836.6 million per annum. 
 
 |                      | Mean Estimates | Upper Bound (97.5%) |
 | -------------------- | -------------: | ------------------: |
@@ -94,6 +96,9 @@ In addition, the following benefits are included as a part of the program to ass
 | Total Economic Costs | φ 836,566,436  | φ 35,376,330,076    |
 
 #### Program costs
+Under the proposed social insurance program, residents in high-risk areas (Region 2, 4, 5, 6) will be incentivised to move both before and after a hazard event occurs. This corresponds to the voluntary and involuntary costs below, respectively. In the short-term, this program will lead to higher economic costs due to extra payments to incentivise residents to move to lower-risk regions through lump-sum payments, construction of new homes, rent payments and house buy-backs (see Program Design section for full details).
+>
+From the projected values below, a slight reduction in the mean property damage and displacement cost estimates is evident, compared to costs without the program (11.69% and 11.54% respectively). Additionally, in the short-term (2020-2030), the cost of incentivising voluntary relocation is around φ 12 billion, while involuntary relocation after a hazard event is only around φ 55.5 million. As the number of voluntary relocations declines, the scheme costs will also decline.
 
 |                            | Mean Estimates   | Upper Bound (97.5%) |
 | -------------------------- | ---------------: | ------------------: |
@@ -107,6 +112,7 @@ In addition, the following benefits are included as a part of the program to ass
 ### Long-term projections
 
 #### Program costs
+With the social insurance program in place, the effects of incentivising relocation will continue to be experienced and reduce the overall property damage and displacement costs. Averaging over 10 years of economic costs (i.e. 2070-2080), gives the values in the table below. Both the mean and upper bound estimates are significantly lower than without the program (18.87% and 11.08% respectively). Moreover, the incentive cost for voluntary relocation is under φ 200,000, suggesting that the equilibrium population allocation in each region has almost been reached. The average displacement costs have also decreased another 8% from the initial short-term projection.
 
 |                            | Mean Estimates   | Upper Bound (97.5%) |
 | -------------------------- | ---------------: | ------------------: |
@@ -118,14 +124,25 @@ In addition, the following benefits are included as a part of the program to ass
 | Total Economic Costs       | φ 731,170,922    | φ 31,513,768,160    |
 
 ### Capital and solvency requirements
+According to the European Union’s Solvency II requirement, companies must hold enough capital to have a 99.5% confidence of surviving the most extreme expected losses during a year (Risk.net n.d.). To ensure this same level of certainty for Storslysia’s insurance program, the total economic capital in the first year of implementation would be close to φ 390 billion. After that, each subsequent year requires less capital to be held ending at around φ 346 billion needed in 2110. The amount of capital needed over the short and long-term timeframes is displayed in the graph below.
 
+![Capital Requirement Graph](Graph - Capital Requirement.png)
 
 ## Assumptions
 Assumptions within the modelling process, economic climate and validity of the utilised datasets were required to ensure the program generated accurate and reliable results. A summary of all the assumptions used can be seen in the table below.
->
-(table from report - either screenshot or create a table)
 
-(Karen: didn't include the wordy explanations)
+| # | Assumption | Explanation |
+| --- | :--- | :--- |
+| 01 | Population | Closed population model (based on 2021 population) |
+| 02 | Voluntary relocation | 4% of households voluntarily relocate each year, decreasing by 20% per year |
+| 03 | Displacement | 20% of households impacted by climate event will relocate | 
+| 04 | Temporary housing | Only needed for 12 months after a hazard event and is adequate time to rebuild a house to a liveable state |
+| 05 | Inflation | Average material and labour inflation after a hazard event is 25%, while in the more severe scenarios is 50%; no inflation for voluntary relocation |
+| 06 | House contents | Value as proportion of house value is based on ABS data, average cost of replacing increases by 57.5% after a hazard event, with the more severe case of 75% |
+| 07 | Median value | Property values of each region are estimated by median value |
+| 08 | Property damage | Increases/decreases are proportional to the changes in population in the region |
+| 09 | Model | Chosen frequency and severity models are correct |
+| 10 | Interpolation | Data can be accurately interpolated via linear or geometric mean |
 
 ## Risk and Risk Mitigation Strategies
 
@@ -133,7 +150,7 @@ Assumptions within the modelling process, economic climate and validity of the u
 When a project is underway, unexpected factors have the potential to affect the success of a project, and thus proactive identification, assessment and action improves the chance of success in meeting project objectives (Hillson, David 2014). The risk matrix (below) illustrates the key areas of risk present within the scheme, and is accompanied by an explanatory table:
 
 
-![alt text](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/risk_matrix_actl4001.png) 
+![Risk Matrix](risk_matrix_actl4001.png) 
 
 
 Risk | Description | Mitigation
@@ -153,14 +170,14 @@ The sensitivity analysis is performed using the Shared Socioeconomic Pathways (S
 Under the proposed program, there is a 97.5% confidence that costs will not exceed 10% of Storslysia’s GDP in any given year as seen in the graph below. The solid lines represent the scheme cost and dashed lines represent 10% of GDP, each under the four SSP scenarios. The real GDP is modelled assuming no population growth and only increases in GDP per capita. While the scheme does not exceed 10% of GDP between now and 2100, there is the possibility it may exceed this level after 2100, particularly in the SSP5 scenario. This means that the program and underlying model assumptions must be assessed in the future to ensure it remains sustainable beyond around 80 years.
 >
 
-![alt text](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Log%20economic%20cost%20of%20scheme%20GDP%2095%20CI.png)
+![Economic Cost of Scheme](Log economic cost of scheme GDP 95 CI.png)
 
 
 Given constant claims (no adjusting for climate scenarios), the scheme is expected to have a negative economic benefit for 26 years. After this, the scheme delivers benefits increasing to $110 million in reduced damage and displacement costs per year. Under higher claims scenarios, the economic benefits of the scheme increase: 
->
+  
 * Under the SSP2 scenario and the mean claims predicted, the scheme delivers positive economic benefits within 20 years reaching $180 million per year by 2065  
 * Under the severe claims (97.5th percentile) and SSP3 scenario, the scheme delivers economic benefits within 10 years, which can reach almost $10 billion per year (see Appendix Table 6.1 and 6.2)
->
+  
 The success of the scheme depends on the take-up of the voluntary relocation program, the main driver of reduced risks and reduced damage and associated costs. Secondary research suggested that between 15-20% of people would consider relocating to be away from high-risk areas without any additional financial incentive; hence, our 20% estimate of voluntary relocation is rather conservative, and take-up may be even higher (Yazzie R. 2021). 
 
 
@@ -180,9 +197,9 @@ The inability of historical data to perfectly capture population movements and a
 In conclusion, the proposed social insurance scheme can help Storslysia mitigate their climate-related displacement risk while remaining under 10% GDP with a high level of confidence. After extensive analysis on the impact of the social insurance program over short and long-term timeframes and under different climate scenarios, the improved financial and social benefits associated with the scheme provide substantial evidence that the project should be employed given our assumptions. Although there are risk mitigation analysis and monitoring protocols incorporated within the program design of the scheme, it is quintessential to verify the plausibility of assumptions to ensure the validity and success of the scheme in achieving its objective to manage the financial risks associated with catastrophe-related displacement in Storslysia. The viability and strategy of financing the scheme must also be considered. 
 
 ## References
->
+  
 * Australian Bureau of Statistics, 4102.0 -  Australian Social Trends, Dec 2011, Commonwealth of Australia, last accessed 21st March 2023, < https://www.abs.gov.au/AUSSTATS/abs@.nsf/Lookup/4102.0Main+Features10Dec+2011>
-* C, S. (2017) Social Insurance: Meaning and Features | Poverty|Economics, last accessed 18th March 2023,  <https://www.economicsdiscussion.net/social-insurance/social-insurance-meaning-and-features-poverty-economics/29305>
+* C, S. (2017) Social Insurance: Meaning and Features, last accessed 18th March 2023,  <https://www.economicsdiscussion.net/social-insurance/social-insurance-meaning-and-features-poverty-economics/29305>
 * College of Vocational Studies, Meaning of Social Insurance Features of Social Insurance, Last accessed 21st March 2023, < https://www.cvs.edu.in/upload/Social%20insurance%20-%20feature%20and%20need.pdf>
 * Department of Regional NSW, Northern Rivers Reconstruction Corporation (2022) Northern Rivers’ voluntary home buy backs to start, last accessed 19th March 2023 <https://www.nsw.gov.au/media-releases/northern-rivers-voluntary-home-buy-backs-to-start>
 * Deryugina, T. (2022), Economic effects of natural disasters, IZA World of Labor, last accessed 22nd March 2023, <IZA World of Labor - Economic effects of natural disasters >
