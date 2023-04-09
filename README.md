@@ -9,16 +9,11 @@ source: https://guillaumekurkdjian.com/
 
 ## Group JKB Consulting Report
 
-The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the buttons or links below.
+The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the buttons below.
 
 [![2023 SOA Case Study](button_2023_SOA_CASE_STUDY.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
 [![CONSULTING REPORT](button_CONSULTING_REPORT.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
 [![FINAL COMBINED CODE](button_FINAL_COMBINED_CODE.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
-
-
-[2023 SOA Case Study](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)   |
-[Consulting Report](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)   |
-[Final Combined Code](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
 
 ---
 
@@ -26,6 +21,7 @@ The purpose of this page is to outline the key insights and analysis of the prop
 [Executive Summary](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#executive-summary)
 >
 [Objectives](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#objectives)
+>
 [Program Design](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#program-design)
 >
 [Pricing and Costs](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/README.md#pricing-and-costs)
@@ -108,7 +104,7 @@ Without the proposed insurance program, the cost of total property damage is est
 
 #### Program costs
 Under the proposed social insurance program, residents in high-risk areas (Region 2, 4, 5, 6) will be incentivised to move both before and after a hazard event occurs. This corresponds to the voluntary and involuntary costs below, respectively. In the short-term, this program will lead to higher economic costs due to extra payments to incentivise residents to move to lower-risk regions through lump-sum payments, construction of new homes, rent payments and house buy-backs (see Program Design section for full details).
->
+
 From the projected values below, a slight reduction in the mean property damage and displacement cost estimates is evident, compared to costs without the program (11.69% and 11.54% respectively). Additionally, in the short-term (2020-2030), the cost of incentivising voluntary relocation is around φ 12 billion, while involuntary relocation after a hazard event is only around φ 55.5 million. As the number of voluntary relocations declines, the scheme costs will also decline.
 
 |                            | Mean Estimates   | Upper Bound (97.5%) |
@@ -167,7 +163,7 @@ When a project is underway, unexpected factors have the potential to affect the 
 Risk | Description | Mitigation
 --- | --- | ---
 A: Event Risk | Risk that future climate events result in damages deviating from model predictions; regions may not be homogeneously affected by climate change and new homes in regions 1 and 3 may have different risk profiles from existing homes | Monitor model predictions versus actual property damage on a regular basis; perform sensitivity analysis at the 97.5% event-risk level and hold recommended capital reserves at the 99.5% risk-level |
-B: Legislative/Governance Risk | Frequency and severity of climate events are contingent upon governments' climate policies; political and governance changes may require modifications to the scheme | Close analysis and discussion with Storslyia's government annually to determine if the scheme is still adequate; consider impact different climate scenarios |
+B: Legislative/ Governance Risk | Frequency and severity of climate events are contingent upon governments' climate policies; political and governance changes may require modifications to the scheme | Close analysis and discussion with Storslyia's government annually to determine if the scheme is still adequate; consider impact different climate scenarios |
 C: Inequality Risk | Risk that the scheme exacerbates or creates inequalities by disproportionately assisting citizens of higher socio-economic status who are often owner-occupiers | Specific schemes to assist lower-income and wealth individuals and limit the maximum amount paid (such as paying up to the median value of properties in the new region); monitoring people who take up the scheme and modifying it to make it more equitable |
 D: Migration Risk | Program's ability to induce relocations from one region to another is constrained by household decision making, affecting the economic success of the scheme | Financial compensation provided to incentivise relocations, which will be reviewed and updated |
 E: Prediction Risk | Difficulty in projecting for long-term timeframes of up to 100 years, resulting in volatile forecasts and affecting capital allocation and scheme costing | Conservative approach taken in claims modelling and in assumptions; sensitivity analysis performed to consider impact of varying scenarios
