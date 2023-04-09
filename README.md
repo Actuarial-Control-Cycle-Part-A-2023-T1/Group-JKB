@@ -1,18 +1,19 @@
 # 2023 Student Research Case Study Challenge: Relocation Social Insurance 
 
 ![city](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/gif_city.gif)
+>
 source: https://guillaumekurkdjian.com/
 
 ## UNSW x SOA sponsored by Valani Global
-![alt text](LOGOS.svg "UNSW, SOA & Valani Global logos")
+![alt text](image_logos.svg "UNSW, SOA & Valani Global logos")
 
 ## Group JKB Consulting Report
 
 The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the buttons or links below.
 
-[![2023 SOA Case Study](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/2023%20SOA%20CASE%20STUDY%20button.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
-[![CONSULTING REPORT](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/CONSULTING%20REPORT%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
-[![FINAL COMBINED CODE](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/FINAL%20COMBINED%20CODE%20button.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
+[![2023 SOA Case Study](button_2023_SOA_CASE_STUDY.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
+[![CONSULTING REPORT](button_CONSULTING_REPORT.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/UNSW%20Group%20JKB%20Consulting%20Report%202023.pdf)
+[![FINAL COMBINED CODE](button_FINAL_COMBINED_CODE.svg)](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Combined%20Code%20-%20FINAL)
 
 
 [2023 SOA Case Study](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)   |
@@ -68,6 +69,7 @@ To be eligible for voluntary relocation support, a household in a highly affecte
 To be eligible for involuntary relocation support, a household must be affected by a severe weather event, causing irrecoverable damage to the home such that it is no longer fit for living. 
 
 ![fast flood](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/gif_fast%20flood.gif)
+>
 source: https://guillaumekurkdjian.com/
 
 ### Program coverage
@@ -85,6 +87,7 @@ In addition, the following benefits are included as a part of the program to ass
 | Renters (Region 2,4,5,6)         | Pay for home rental costs for 6 months (up to median rent)                      | Pay for home rental costs for 2 months in the new region (up to the median rent)               |
 
 ![new condo](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/gif_new_condo.gif)
+>
 source: https://guillaumekurkdjian.com/
 
 ## Pricing and Costs
@@ -134,7 +137,7 @@ With the social insurance program in place, the effects of incentivising relocat
 ### Capital and solvency requirements
 According to the European Union’s Solvency II requirement, companies must hold enough capital to have a 99.5% confidence of surviving the most extreme expected losses during a year (Risk.net n.d.). To ensure this same level of certainty for Storslysia’s insurance program, the total economic capital in the first year of implementation would be close to φ 390 billion. After that, each subsequent year requires less capital to be held ending at around φ 346 billion needed in 2110. The amount of capital needed over the short and long-term timeframes is displayed in the graph below.
 
-![Capital Requirement Graph](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Capital%20Requirement%20Graph.png)
+![Capital Requirement Graph](image_capital_requirement.png)
 
 ## Assumptions
 Assumptions within the modelling process, economic climate and validity of the utilised datasets were required to ensure the program generated accurate and reliable results. A summary of all the assumptions used can be seen in the table below.
@@ -158,7 +161,7 @@ Assumptions within the modelling process, economic climate and validity of the u
 When a project is underway, unexpected factors have the potential to affect the success of a project, and thus proactive identification, assessment and action improves the chance of success in meeting project objectives (Hillson, David 2014). The risk matrix (below) illustrates the key areas of risk present within the scheme, and is accompanied by an explanatory table:
 
 
-![Risk Matrix](risk_matrix_actl4001.png) 
+![Risk Matrix](image_risk_matrix.png) 
 
 
 Risk | Description | Mitigation
@@ -178,7 +181,7 @@ The sensitivity analysis is performed using the Shared Socioeconomic Pathways (S
 Under the proposed program, there is a 97.5% confidence that costs will not exceed 10% of Storslysia’s GDP in any given year as seen in the graph below. The solid lines represent the scheme cost and dashed lines represent 10% of GDP, each under the four SSP scenarios. The real GDP is modelled assuming no population growth and only increases in GDP per capita. While the scheme does not exceed 10% of GDP between now and 2100, there is the possibility it may exceed this level after 2100, particularly in the SSP5 scenario. This means that the program and underlying model assumptions must be assessed in the future to ensure it remains sustainable beyond around 80 years.
 >
 
-![Economic Cost of Scheme](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/Log%20economic%20cost%20of%20scheme%20GDP%2095%20CI.png)
+![Economic Cost of Scheme](image_log_economic_cost_of_scheme_GDP_95_CI.png)
 
 
 Given constant claims (no adjusting for climate scenarios), the scheme is expected to have a negative economic benefit for 26 years. After this, the scheme delivers benefits increasing to $110 million in reduced damage and displacement costs per year. Under higher claims scenarios, the economic benefits of the scheme increase: 
