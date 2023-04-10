@@ -61,9 +61,9 @@ The following key metrics will be used to monitor the social insurance program:
 In our program, all citizens of Storslysia will be covered for displacement costs after a climate catastrophe. However, we will distinguish between support for households who are voluntarily relocating and households who are involuntary relocating due to a natural disaster. We also distinguish between renters and owner-occupiers. 
 
 ### Requirements to make a claim
-All households, regardless of region, are entitled to financial support for temporary housing, rebuilding their property and household-goods replacement costs. For households in regions 2, 4, 5 and 6, additional support is provided contingent upon that household relocating to regions 1 or 3, the lower risk regions. (See Appendix Table 2.1 for justification of which regions are high and low risk).
+All households, regardless of region, are entitled to financial support for temporary housing, rebuilding their property and household-goods replacement costs. For households in regions 2, 4, 5 and 6, additional support is provided contingent upon that household relocating to regions 1 or 3, the lower risk regions. (See report Appendix Table 2.1 for justification of which regions are high and low risk).
 To be eligible for voluntary relocation support, a household in a highly affected region (regions 2, 4, 5 and 6) may apply for financial assistance to relocate their household to a safer region (regions 1 or 3). Both renters and owner-occupiers in highly affected regions are eligible for this support. 
-To be eligible for involuntary relocation support, a household must be affected by a severe weather event, causing irrecoverable damage to the home such that it is no longer fit for living. 
+To be eligible for involuntary relocation support, a household in regions 2, 4, 5 or 6 must be affected by a severe weather event, causing irrecoverable damage to the home such that it is no longer fit for living. 
 
 ![fast flood](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/gif_fast%20flood.gif)
 >
