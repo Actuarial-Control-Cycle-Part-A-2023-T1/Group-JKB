@@ -144,7 +144,7 @@ Assumptions within the modelling process, economic climate and validity of the u
 | 01 | Population | Closed population model (based on 2021 population) |
 | 02 | Voluntary relocation | 4% of households voluntarily relocate each year, decreasing by 20% per year |
 | 03 | Displacement | 20% of households impacted by climate event will relocate | 
-| 04 | Temporary housing | Only needed for 12 months after a hazard event and is adequate time to rebuild a house to a liveable state |
+| 04 | Temporary housing | Only needed for 12 months after a hazard event which is adequate time to rebuild a house to a liveable state |
 | 05 | Inflation | Average material and labour inflation after a hazard event is 25%, while in the more severe scenarios is 50%; no inflation for voluntary relocation |
 | 06 | House contents | Value as proportion of house value is based on ABS data, average cost of replacing increases by 57.5% after a hazard event, with the more severe case of 75% |
 | 07 | Median value | Property values of each region are estimated by median value |
