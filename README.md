@@ -186,7 +186,7 @@ Under the proposed program, there is a 97.5% confidence that costs will not exce
 Given constant claims (no adjusting for climate scenarios), the scheme is expected to have a negative economic benefit for 26 years. After this, the scheme delivers benefits increasing to $110 million in reduced damage and displacement costs per year. Under higher claims scenarios, the economic benefits of the scheme increase: 
   
 * Under the SSP2 scenario and the mean claims predicted, the scheme delivers positive economic benefits within 20 years reaching $180 million per year by 2065  
-* Under the severe claims (97.5th percentile) and SSP3 scenario, the scheme delivers economic benefits within 10 years, which can reach almost $10 billion per year (see Appendix Table 6.1 and 6.2)
+* Under the severe claims (97.5th percentile) and SSP3 scenario, the scheme delivers economic benefits within 10 years, which can reach almost $10 billion per year (see report Appendix Table 6.1 and 6.2)
   
 The success of the scheme depends on the take-up of the voluntary relocation program, the main driver of reduced risks and reduced damage and associated costs. Secondary research suggested that between 15-20% of people would consider relocating to be away from high-risk areas without any additional financial incentive; hence, our 20% estimate of voluntary relocation is rather conservative, and take-up may be even higher (Yazzie R. 2021). 
 
@@ -194,7 +194,7 @@ The success of the scheme depends on the take-up of the voluntary relocation pro
 ## Data and Data Limitations
 
 ### Data Sources
-In addition to the Storlysia-specific data – housing and demographic information, historical weather-related hazards data and macroeconomic data – external data from the ABS was also utilized to inform the modelling process.
+In addition to the Storlysia-specific data – housing and demographic information, historical weather-related hazards data and macroeconomic data – external data from the ABS (Australiabn Bureau of Statistics) was also utilized to inform the modelling process.
 
 ### Limitations of provided data
 There are inherent data limitations which inhibit the predictive capacity of the program and hence reliability. Operational risks as a result of human error when inputting, duplicate or missing values and one-off extreme values in historical data (e.g. inflation values in 2003) have impacts in the training of the model. To overcome these limitations, interpolation via linear or geometric means using surrounding data was utilised where appropriate. The rationale for this was due to calibrate the model without the influence of severe outliers.
@@ -204,7 +204,7 @@ The inability of historical data to perfectly capture population movements and a
 
 
 ## Conclusion/Recommendations
-In conclusion, the proposed social insurance scheme can help Storslysia mitigate their climate-related displacement risk while remaining under 10% GDP with a high level of confidence. After extensive analysis on the impact of the social insurance program over short and long-term timeframes and under different climate scenarios, the improved financial and social benefits associated with the scheme provide substantial evidence that the project should be employed given our assumptions. Although there are risk mitigation analysis and monitoring protocols incorporated within the program design of the scheme, it is quintessential to verify the plausibility of assumptions to ensure the validity and success of the scheme in achieving its objective to manage the financial risks associated with catastrophe-related displacement in Storslysia. The viability and strategy of financing the scheme must also be considered. 
+In conclusion, the proposed social insurance scheme can help Storslysia mitigate their climate-related displacement risk while remaining under 10% GDP with a high level of confidence. After extensive analysis on the impact of the social insurance program over short and long-term timeframes and under different climate scenarios, the improved financial and social benefits associated with the scheme provide substantial evidence that the project should be undertaken given our assumptions. Although there are risk mitigation analysis and monitoring protocols incorporated within the program design of the scheme, it is quintessential to verify the plausibility of assumptions to ensure the validity and success of the scheme in achieving its objective to manage the financial risks associated with catastrophe-related displacement in Storslysia. The viability and strategy of financing the scheme must also be considered. 
 
 ## References
   
