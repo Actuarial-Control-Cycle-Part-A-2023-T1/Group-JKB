@@ -90,37 +90,37 @@ source: https://guillaumekurkdjian.com/
 ## Pricing and Costs
 
 ### Methodology
-To accurately project the economic costs of the climate-related catastrophes for Storslysia, data was gathered from Storslysia’s quarterly historical record of climate-related catastrophes ranging from 1960 to 2020, as well as economic and demographic data on each of the 6 regions. Exploratory data analysis was performed to understand the economic and demographic nature of each region and their climate risks. A training set of data was selected for the period 1960 to 2015, leaving the last 5 years as a validation set to assess performance via various metrics. Taking a frequency-severity approach to pricing claims cost, forecasts were projected for each region using simulations from each distribution, before aggregating to a final estimate with 95% confidence intervals.
+To accurately project the economic costs of the climate-related catastrophes for Storslysia, data was gathered from Storslysia’s quarterly historical record of climate-related catastrophes ranging from 1960 to 2020, as well as economic and demographic data on each of the 6 regions. Exploratory data analysis was performed to understand the economic and demographic nature of each region and their climate risks. A training set of data was selected for the period 1960 to 2015, leaving the last 5 years as a validation set to assess performance via various metrics. Taking a frequency-severity approach to pricing claims cost, forecasts were projected for each region using simulations from each distribution, before aggregating to a final estimate with 97.5% confidence intervals.
 
-### Short-term projections
+### Short-term projections - average over the program's first 10 years
 
 #### Economic costs
 Without the proposed insurance program, the cost of total property damage is estimated to be close to φ 255 million per annum. Along with property damage, climate-related catastrophes also come with additional costs, including temporary housing for involuntary relocation, material and labour for rebuilding damaged properties, and replacing household items. These costs have been summarised in the table below as displacement costs. The short-term projection (2020-2030) for total economic cost is φ 836.6 million per annum. 
 
 |                      | Mean Estimates | Upper Bound (97.5%) |
 | -------------------- | -------------: | ------------------: |
-| Property Damage      | φ 255,15,548   | φ 9,637,762,244     |
+| Property Damage      | φ 255,115,548   | φ 9,637,762,244     |
 | Displacement Costs   | φ 581,450,888  | φ 25,738,567,833    |
 | Total Economic Costs | φ 836,566,436  | φ 35,376,330,076    |
 
 #### Program costs
 Under the proposed social insurance program, residents in high-risk areas (Region 2, 4, 5, 6) will be incentivised to move both before and after a hazard event occurs. This corresponds to the voluntary and involuntary costs below, respectively. In the short-term, this program will lead to higher economic costs due to extra payments to incentivise residents to move to lower-risk regions through lump-sum payments, construction of new homes, rent payments and house buy-backs (see Program Design section for full details).
 
-From the projected values below, a slight reduction in the mean property damage and displacement cost estimates is evident, compared to costs without the program (11.69% and 11.54% respectively). Additionally, in the short-term (2020-2030), the cost of incentivising voluntary relocation is around φ 12 billion, while involuntary relocation after a hazard event is only around φ 55.5 million. As the number of voluntary relocations declines, the scheme costs will also decline.
+From the projected values below, a slight reduction in the mean property damage and displacement cost estimates is evident, compared to costs without the program (11.6% and 6.9% respectively). Additionally, in the short-term (2020-2030), the cost of incentivising voluntary relocation is around φ 12 billion, while involuntary relocation after a hazard event is only around φ 55.5 million. As the number of voluntary relocations declines, the scheme costs will also decline.
 
 |                            | Mean Estimates   | Upper Bound (97.5%) |
 | -------------------------- | ---------------: | ------------------: |
-| Property Damage            | φ 255,15,548     | φ 9,637,762,244     |
-| Displacement Costs         | φ 581,450,888    | φ 25,738,567,833    |
+| Property Damage            | φ 225,302,571    | φ 8,968,316,447     |
+| Displacement Costs         | φ 514,378,676    | φ 23,953,318,562    |
 | Relocation Incentive Costs | φ 12,310,238,772 | φ 12,310,238,772    |
 | *Voluntary Costs*          | φ 12,254,805,736 | φ 12,254,805,736    |
 | *Involuntary Costs*        | φ 55,433,035     | φ 55,433,035        |
-| Total Economic Costs       | φ 836,566,436    | φ 35,376,330,076    |
+| Total Economic Costs       | φ 13,049,920,018 | φ 45,231,873,780    |
 
 ### Long-term projections
 
 #### Program costs
-With the social insurance program in place, the effects of incentivising relocation will continue to be experienced and reduce the overall property damage and displacement costs. Averaging over 10 years of economic costs (i.e. 2070-2080), gives the values in the table below. Both the mean and upper bound estimates are significantly lower than without the program (18.87% and 11.08% respectively). Moreover, the incentive cost for voluntary relocation is under φ 200,000, suggesting that the equilibrium population allocation in each region has almost been reached. The average displacement costs have also decreased another 8% from the initial short-term projection.
+With the social insurance program in place, the effects of incentivising relocation will continue to be experienced and reduce the overall property damage and displacement costs. Averaging over 10 years of economic costs (i.e. 2070-2080), gives the values in the table below. Both the mean and upper bound estimates for property damange and displacement costs are significantly lower than without the program (12.6% and 10.9% respectively). Moreover, the incentive cost for voluntary relocation is under φ 200,000, suggesting that the equilibrium population allocation in each region has almost been reached. The average displacement costs have also decreased another 8% from the initial short-term projection.
 
 |                            | Mean Estimates   | Upper Bound (97.5%) |
 | -------------------------- | ---------------: | ------------------: |
