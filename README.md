@@ -184,7 +184,6 @@ Under the proposed program, there is a 97.5% confidence that costs will not exce
 
 ![Economic Costs with Scheme](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/image_log_economic_cost_with_scheme.png)
 
-
 Given constant claims (no adjusting for climate scenarios), the scheme is expected to have a negative economic benefit for 26 years. After this, the scheme delivers benefits increasing to $110 million in reduced damage and displacement costs per year. Under higher claims scenarios, the economic benefits of the scheme increase: 
   
 * Under the SSP2 scenario and the mean claims predicted, the scheme delivers positive economic benefits within 20 years reaching $180 million per year by 2065  
