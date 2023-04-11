@@ -182,7 +182,7 @@ The sensitivity analysis is performed using the Shared Socioeconomic Pathways (S
 Under the proposed program, there is a 97.5% confidence that costs will not exceed 10% of Storslysia’s GDP in any given year as seen in the graph below. The solid lines represent the scheme cost and dashed lines represent 10% of GDP, each under the four SSP scenarios. The real GDP is modelled assuming no population growth and only increases in GDP per capita. While the scheme does not exceed 10% of GDP between now and 2100, there is the possibility it may exceed this level after 2100, particularly in the SSP5 scenario. This means that the program and underlying model assumptions must be assessed in the future to ensure it remains sustainable beyond around 80 years.
 >
 
-![Economic Costs with Scheme](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/image_log_economic_cost_with_scheme.png)
+![Economic Costs with Scheme](image_log_economic_cost_without_scheme.png)
 
 Given constant claims (no adjusting for climate scenarios), the scheme is expected to have a negative economic benefit for 26 years. After this, the scheme delivers benefits increasing to $110 million in reduced damage and displacement costs per year. Under higher claims scenarios, the economic benefits of the scheme increase: 
   
