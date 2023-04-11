@@ -1,6 +1,6 @@
 # 2023 Student Research Case Study Challenge: Relocation Social Insurance 
 
-![city](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/gif_city.gif)
+![city](gif_city.gif)
 >
 source: https://guillaumekurkdjian.com/
 
@@ -65,7 +65,7 @@ All households, regardless of region, are entitled to financial support for temp
 To be eligible for voluntary relocation support, a household in a highly affected region (regions 2, 4, 5 and 6) may apply for financial assistance to relocate their household to a safer region (regions 1 or 3). Both renters and owner-occupiers in highly affected regions are eligible for this support. 
 To be eligible for involuntary relocation support, a household in regions 2, 4, 5 or 6 must be affected by a severe weather event, causing irrecoverable damage to the home such that it is no longer fit for living. 
 
-![fast flood](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/gif_fast%20flood.gif)
+![fast flood](gif_fast_flood.gif)
 >
 source: https://guillaumekurkdjian.com/
 
@@ -83,7 +83,7 @@ In addition, the following benefits are included as a part of the program to ass
 | Owner-occupiers (Region 2,4,5,6) | Pay for construction of new home (up to median value) + lump-sum of φ 10,000 | Buy back uninhabitable homes (up to median value) provided the household moves to a low-risk region |
 | Renters (Region 2,4,5,6)         | Pay for home rental costs for 6 months (up to median rent)                      | Pay for home rental costs for 2 months in the new region (up to the median rent)               |
 
-![new condo](https://github.com/Actuarial-Control-Cycle-Part-A-2023-T1/Group-JKB/blob/main/gif_new_condo.gif)
+![new condo](gif_new_condo.gif)
 >
 source: https://guillaumekurkdjian.com/
 
