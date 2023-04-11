@@ -9,6 +9,8 @@ source: https://cdn.dribbble.com/users/330915/screenshots/3882301/media/d930615a
 
 ## Group JKB Consulting Report
 
+*Members: John Mckinnon, Karen Chan, Benjamin Quek*
+
 The purpose of this page is to outline the key insights and analysis of the proposed scheme to address displacement risk as a result of climate impacts for Storlysia. For access to the full report and relevant codes, please click on the buttons below.
 
 [![2023 SOA Case Study](button_2023_SOA_CASE_STUDY.svg)](https://www.soa.org/research/opportunities/2023-student-research-case-study-challenge/)
